@@ -1,0 +1,575 @@
+---
+title: "HCAMP PCSS"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: spacelab
+    highlight: tango 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(here)
+library(janitor)
+library(rio)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(gt)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+library(glue)
+library(fs)
+library(rstatix)
+library(ggpubr)
+library(writexl)
+library(remotes)
+library(sundry)
+
+theme_set(theme_minimal(15) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(color = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
+```
+
+```{r, include=FALSE}
+biif <- import(here("data", "BIIF.xlsx"),
+               setclass = "tbl_df") %>% 
+  janitor::clean_names() %>% 
+  select(c(1:12, 19, 21, 26:32))
+
+biif$onset <- as.Date(biif$onset, format = "%m/%d/%Y")
+biif$rtp_protocol_7 <- as.Date(biif$rtp_protocol_7, format = "%m/%d/%Y")
+biif$rtp_protocol_1_cognitive_physical_rest <- as.Date(biif$rtp_protocol_1_cognitive_physical_rest, format = "%m/%d/%Y")
+biif$rtp_protocol_2_return_to_school_full_time <- as.Date(biif$rtp_protocol_2_return_to_school_full_time, format = "%m/%d/%Y")
+biif$rtp_protocol_3_light_exercise <- as.Date(biif$rtp_protocol_3_light_exercise, format = "%m/%d/%Y")
+biif$rtp_protocol_4_running_no_equipment <- as.Date(biif$rtp_protocol_4_running_no_equipment, format = "%m/%d/%Y")
+biif$rtp_protocol_5_non_contact_drills <- as.Date(biif$rtp_protocol_5_non_contact_drills, format = "%m/%d/%Y")
+biif$rtp_protocol_6_full_contact_practice <- as.Date(biif$rtp_protocol_6_full_contact_practice, format = "%m/%d/%Y")
+biif$rtp_protocol_7_returned_to_full_unrestricted_activity <- as.Date(biif$rtp_protocol_7_returned_to_full_unrestricted_activity, format = "%m/%d/%Y")
+
+str(biif)
+
+oia <- import(here("data", "OIA.xlsx"),
+               setclass = "tbl_df") %>% 
+  janitor::clean_names() %>% 
+  select(c(1:12, 19, 21, 26:32))
+
+oia$onset <- as.Date(oia$onset, format = "%m/%d/%Y")
+oia$rtp_protocol_7 <- as.Date(oia$rtp_protocol_7, format = "%m/%d/%Y")
+oia$rtp_protocol_1_cognitive_physical_rest <- as.Date(oia$rtp_protocol_1_cognitive_physical_rest, format = "%m/%d/%Y")
+oia$rtp_protocol_2_return_to_school_full_time <- as.Date(oia$rtp_protocol_2_return_to_school_full_time, format = "%m/%d/%Y")
+oia$rtp_protocol_3_light_exercise <- as.Date(oia$rtp_protocol_3_light_exercise, format = "%m/%d/%Y")
+oia$rtp_protocol_4_running_no_equipment <- as.Date(oia$rtp_protocol_4_running_no_equipment, format = "%m/%d/%Y")
+oia$rtp_protocol_5_non_contact_drills <- as.Date(oia$rtp_protocol_5_non_contact_drills, format = "%m/%d/%Y")
+oia$rtp_protocol_6_full_contact_practice <- as.Date(oia$rtp_protocol_6_full_contact_practice, format = "%m/%d/%Y")
+oia$rtp_protocol_7_returned_to_full_unrestricted_activity <- as.Date(oia$rtp_protocol_7_returned_to_full_unrestricted_activity, format = "%m/%d/%Y")
+
+
+kif <- import(here("data", "KIF.xlsx"),
+               setclass = "tbl_df") %>% 
+  janitor::clean_names() %>% 
+  select(c(1:12, 19, 21, 26:32))
+
+
+kif$onset <- as.Date(kif$onset, format = "%m/%d/%Y")
+kif$rtp_protocol_7 <- as.Date(kif$rtp_protocol_7, format = "%m/%d/%Y")
+kif$rtp_protocol_1_cognitive_physical_rest <- as.Date(kif$rtp_protocol_1_cognitive_physical_rest, format = "%m/%d/%Y")
+kif$rtp_protocol_2_return_to_school_full_time <- as.Date(kif$rtp_protocol_2_return_to_school_full_time, format = "%m/%d/%Y")
+kif$rtp_protocol_3_light_exercise <- as.Date(kif$rtp_protocol_3_light_exercise, format = "%m/%d/%Y")
+kif$rtp_protocol_4_running_no_equipment <- as.Date(kif$rtp_protocol_4_running_no_equipment, format = "%m/%d/%Y")
+kif$rtp_protocol_5_non_contact_drills <- as.Date(kif$rtp_protocol_5_non_contact_drills, format = "%m/%d/%Y")
+kif$rtp_protocol_6_full_contact_practice <- as.Date(kif$rtp_protocol_6_full_contact_practice, format = "%m/%d/%Y")
+kif$rtp_protocol_7_returned_to_full_unrestricted_activity <- as.Date(kif$rtp_protocol_7_returned_to_full_unrestricted_activity, format = "%m/%d/%Y")
+
+
+mil <- import(here("data", "MIL.xlsx"),
+               setclass = "tbl_df") %>% 
+  janitor::clean_names() %>% 
+  select(c(1:12, 19, 21, 26:32))
+
+
+mil$onset <- as.Date(mil$onset, format = "%m/%d/%Y")
+mil$rtp_protocol_7 <- as.Date(mil$rtp_protocol_7, format = "%m/%d/%Y")
+mil$rtp_protocol_1_cognitive_physical_rest <- as.Date(mil$rtp_protocol_1_cognitive_physical_rest, format = "%m/%d/%Y")
+mil$rtp_protocol_2_return_to_school_full_time <- as.Date(mil$rtp_protocol_2_return_to_school_full_time, format = "%m/%d/%Y")
+mil$rtp_protocol_3_light_exercise <- as.Date(mil$rtp_protocol_3_light_exercise, format = "%m/%d/%Y")
+mil$rtp_protocol_4_running_no_equipment <- as.Date(mil$rtp_protocol_4_running_no_equipment, format = "%m/%d/%Y")
+mil$rtp_protocol_5_non_contact_drills <- as.Date(mil$rtp_protocol_5_non_contact_drills, format = "%m/%d/%Y")
+mil$rtp_protocol_6_full_contact_practice <- as.Date(mil$rtp_protocol_6_full_contact_practice, format = "%m/%d/%Y")
+mil$rtp_protocol_7_returned_to_full_unrestricted_activity <- as.Date(mil$rtp_protocol_7_returned_to_full_unrestricted_activity, format = "%m/%d/%Y")
+
+str(kif)
+str(mil)
+str(biif)
+str(oia)
+
+
+all_leagues <- bind_rows(biif, oia, kif, mil, .id = "dataset")
+
+all_leagues <- all_leagues %>% 
+  mutate(age = round(age)) %>% 
+  mutate(gender = recode(gender,
+                         `F` = "Female",
+                         `M` = "Male"),
+         level = recode(level, 
+                        `JV` = "Junior Varsity"))
+  
+
+mean_2 <- function(x) {
+  z <- na.omit(x)
+  sum(z) / length(z)
+}
+
+my_mean <- function(x) {
+  mean(x[x >= 0], na.rm = TRUE)
+}
+
+mean_2(all_leagues$days_missed)
+my_mean(all_leagues$days_missed)
+
+
+create_react_time <- function(df, var) {
+    df %>% 
+      summarize(Mean = mean({{var}}),
+                SD = sd({{var}}),
+                Min = min({{var}}),
+                Max = max({{var}}),
+                Total = length({{var}})) %>% 
+      mutate_if(is.numeric, round, 2) %>% 
+      reactable(columns = list(
+        Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ))
+}
+
+create_react <- function(df, var) {
+    df %>% 
+      summarize(Mean = mean({{var}}),
+                SD = sd({{var}}),
+                Min = min({{var}}),
+                Max = max({{var}}),
+                Total = length({{var}})) %>% 
+      mutate_if(is.numeric, round, 2) %>% 
+      reactable(columns = list(
+        Mean = colDef(format = colFormat(separators = TRUE)),
+        SD = colDef(format = colFormat(separators = TRUE)),
+        Min = colDef(format = colFormat(separators = TRUE)),
+        Max = colDef(format = colFormat(separators = TRUE)),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ))
+}
+
+### consider pulling over code from RTL file for identifying concussion injuries in RTL data set
+```
+
+
+```{r, include=FALSE}
+# load impact test data
+
+files <- dir_ls(here::here("data"), glob = "*.csv")
+
+d <- map_df(files, read_csv, .id = "file",
+                 col_types = cols(.default = "c")) %>% 
+  modify(~parse_guess(.x)) %>% 
+  janitor::clean_names() %>% 
+  mutate(year = parse_number(file)) %>% 
+  mutate(year = as.factor(year))
+
+d <- d %>% 
+  mutate(first_name = str_to_title(first_name),
+         last_name = str_to_title(last_name))
+
+impact <- d %>% 
+  select(year,
+         passport_id, 
+         first_name,
+         last_name,
+         user_gender,
+         user_age,
+         user_current_sport,
+         user_number_of_concussions,
+         test_date,
+         test_type,
+         user_memory_composite_score_verbal,
+         user_memory_composite_score_visual,
+         user_visual_motor_composite_score,
+         user_impulse_control_composite_score,
+         user_reaction_time_composite_score,
+         user_symptom1,
+         user_symptom2,
+         user_symptom3,
+         user_symptom4,
+         user_symptom5,
+         user_symptom6,
+         user_symptom7,
+         user_symptom8,
+         user_symptom9,
+         user_symptom10,
+         user_symptom11,
+         user_symptom12,
+         user_symptom13,
+         user_symptom14,
+         user_symptom15,
+         user_symptom16,
+         user_symptom17,
+         user_symptom18,
+         user_symptom19,
+         user_symptom20,
+         user_symptom21,
+         user_symptom22,
+         user_total_symptom_score) %>% 
+  rename(gender = user_gender,
+         age = user_age,
+         current_sport = user_current_sport,
+         number_of_concussions = user_number_of_concussions,
+         verbal_memory = user_memory_composite_score_verbal,
+         visual_memory = user_memory_composite_score_visual, 
+         visual_motor = user_visual_motor_composite_score,
+         impulse_control = user_impulse_control_composite_score,
+         reaction_time = user_reaction_time_composite_score,
+         pcss_headache = user_symptom1,
+         pcss_nausea = user_symptom2,
+         pcss_vomiting = user_symptom3,
+         pcss_balance_problems = user_symptom4,
+         pcss_dizziness = user_symptom5,
+         pcss_fatigue = user_symptom6,
+         pcss_trouble_falling_asleep = user_symptom7,
+         pcss_excessive_sleep = user_symptom8,
+         pcss_loss_of_sleep = user_symptom9,
+         pcss_drowsiness = user_symptom10,
+         pcss_light_sensitivity = user_symptom11,
+         pcss_noise_sensitivity = user_symptom12,
+         pcss_irritability = user_symptom13,
+         pcss_sadness = user_symptom14,
+         pcss_nervousness = user_symptom15,
+         pcss_more_emotional = user_symptom16,
+         pcss_numbness = user_symptom17,
+         pcss_feeling_slow = user_symptom18,
+         pcss_feeling_foggy = user_symptom19,
+         pcss_difficulty_concentrating = user_symptom20,
+         pcss_difficulty_remembering = user_symptom21,
+         pcss_visual_problems = user_symptom22,
+         total_symptom_score = user_total_symptom_score) %>% 
+  mutate(headache_migraine_cluster_score = pcss_headache + pcss_light_sensitivity + pcss_noise_sensitivity,
+         cognitive_cluster_score = pcss_difficulty_concentrating + pcss_difficulty_remembering + pcss_feeling_slow + pcss_feeling_foggy,
+         anxiety_mood_cluster_score = pcss_sadness + pcss_irritability + pcss_more_emotional + pcss_nervousness + pcss_numbness,
+         ocular_motor_cluster_score = pcss_visual_problems,
+         vestibular_cluster_score = pcss_dizziness + pcss_balance_problems + pcss_nausea + pcss_vomiting,
+         sleep_cluster_score = pcss_drowsiness + pcss_fatigue + pcss_trouble_falling_asleep + pcss_excessive_sleep + pcss_loss_of_sleep)
+
+```
+
+```{r, include=FALSE}
+# filter post-injury test types 
+
+impact$test_type
+
+impact <- impact %>% 
+  filter(test_type != "Baseline" &
+         test_type != "Baseline ++")
+
+impact$test_type
+```
+
+```{r, include=FALSE}
+# Widen data sets focusing on PCSS scores
+
+#headache - symptom 1
+pcss_headache <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_headache),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_headache <- pcss_headache %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_headache <- pcss_headache %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_headache <- pcss_headache %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_headache <- pcss_headache %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# nausea - symptom 2
+
+pcss_nausea <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_nausea),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_nausea <- pcss_nausea %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_nausea <- pcss_nausea %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_nausea <- pcss_nausea %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_nausea <- pcss_nausea %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# vomiting - symptom 3
+
+pcss_vomiting <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_vomiting),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_vomiting <- pcss_vomiting %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_vomiting <- pcss_vomiting %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_vomiting <- pcss_vomiting %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_vomiting <- pcss_vomiting %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# balance problems - symptom 4
+
+pcss_balance_problems <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_balance_problems),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_balance_problems <- pcss_balance_problems %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_balance_problems <- pcss_balance_problems %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_balance_problems <- pcss_balance_problems %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_balance_problems <- pcss_balance_problems %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# dizziness - symptom 5
+
+pcss_dizziness <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_dizziness),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_dizziness <- pcss_dizziness %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_dizziness <- pcss_dizziness %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_dizziness <- pcss_dizziness %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_dizziness <- pcss_dizziness %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# fatigue - symptom 6
+
+pcss_fatigue <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_fatigue),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_fatigue <- pcss_fatigue %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_fatigue <- pcss_fatigue %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_fatigue <- pcss_fatigue %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_fatigue <- pcss_fatigue %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# trouble falling asleep - symptom 7
+
+pcss_tfs <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_trouble_falling_asleep),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_tfs <- pcss_tfs %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_tfs <- pcss_tfs %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_tfs <- pcss_tfs %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_tfs <- pcss_tfs %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# excessive sleep - symptom 8
+
+pcss_ex_sleep <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_excessive_sleep),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_ex_sleep <- pcss_ex_sleep %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_ex_sleep <- pcss_ex_sleep %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_ex_sleep <- pcss_ex_sleep %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_ex_sleep <- pcss_ex_sleep %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
