@@ -32,7 +32,7 @@ library(rstatix)
 library(ggpubr)
 library(writexl)
 library(remotes)
-library(sundry)
+#library(sundry)
 
 theme_set(theme_minimal(15) +
             theme(legend.position = "bottom",
@@ -300,6 +300,24 @@ pcss_headache <- impact %>%
   ) %>% 
   arrange(passport_id) %>% 
   janitor::clean_names()
+
+# trying a data widening function
+
+wide_variable <- function(df, a, b, c, d) {
+  df %>% 
+  group_by({{a}}, {{b}}) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, {{a}}),
+    names_from = {{b}},
+    values_from = c({{c}}, {{d}}),
+  ) %>% 
+  arrange({{a}}) %>% 
+  janitor::clean_names()
+}
+
+pcss_headache_2 <- wide_variable(impact, passport_id, test_type, test_date, pcss_headache)
 
 one_pi_headache <- pcss_headache %>% 
   select(c(1:3, 7)) %>% 
@@ -572,4 +590,1791 @@ four_pi_ex_sleep <- pcss_ex_sleep %>%
   select(c(1:6, 7:10)) %>% 
   arrange(passport_id) %>% 
   na.omit()
+```
+
+```{r, include=FALSE}
+# loss of sleep - symptom 9
+
+pcss_loss_sleep <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_loss_of_sleep),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_loss_sleep <- pcss_loss_sleep %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_loss_sleep <- pcss_loss_sleep %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_loss_sleep <- pcss_loss_sleep %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_loss_sleep <- pcss_loss_sleep %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+
+```{r, include=FALSE}
+# drowsiness - symptom 10
+
+pcss_drowsiness <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_drowsiness),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_drowsiness <- pcss_drowsiness %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_drowsiness <- pcss_drowsiness %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_drowsiness <- pcss_drowsiness %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_drowsiness <- pcss_drowsiness %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# light sensitivity - symptom 11
+
+pcss_light_sen <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_light_sensitivity),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_light_sen <- pcss_light_sen %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_light_sen <- pcss_light_sen %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_light_sen <- pcss_light_sen %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_light_sen <- pcss_light_sen %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# noise sensitivity - symptom 12
+
+pcss_noise_sen <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_noise_sensitivity),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_noise_sen <- pcss_noise_sen %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_noise_sen <- pcss_noise_sen %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_noise_sen <- pcss_noise_sen %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_noise_sen <- pcss_noise_sen %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# irritability - symptom 13
+
+pcss_irritability <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_irritability),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_irritability <- pcss_irritability %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_irritability <- pcss_irritability %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_irritability <- pcss_irritability %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_irritability <- pcss_irritability %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# sadness - symptom 14
+
+pcss_sadness <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_sadness),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_sadness <- pcss_sadness %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_sadness <- pcss_sadness %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_sadness <- pcss_sadness %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_sadness <- pcss_sadness %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# nervousness - symptom 15
+
+pcss_nervousness <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_nervousness),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_nervousness <- pcss_nervousness %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_nervousness <- pcss_nervousness %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_nervousness <- pcss_nervousness %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_nervousness <- pcss_nervousness %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# more emotional - symptom 16
+
+pcss_emotional <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_more_emotional),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_emotional <- pcss_emotional %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_emotional <- pcss_emotional %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_emotional <- pcss_emotional %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_emotional <- pcss_emotional %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# numbness - symptom 17
+
+pcss_numbness <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_numbness),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_numbness <- pcss_numbness %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_numbness <- pcss_numbness %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_numbness <- pcss_numbness %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_numbness <- pcss_numbness %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# feeling slow - symptom 18
+
+pcss_feeling_slow <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_feeling_slow),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_feeling_slow <- pcss_feeling_slow %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_feeling_slow <- pcss_feeling_slow %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_feeling_slow <- pcss_feeling_slow %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_feeling_slow <- pcss_feeling_slow %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# feeling foggy - symptom 19
+
+pcss_feeling_foggy <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_feeling_foggy),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_feeling_foggy <- pcss_feeling_foggy %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_feeling_foggy <- pcss_feeling_foggy %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_feeling_foggy <- pcss_feeling_foggy %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_feeling_foggy <- pcss_feeling_foggy %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# difficulty concentrating - symptom 20
+
+pcss_diff_con <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_difficulty_concentrating),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_diff_con <- pcss_diff_con %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_diff_con <- pcss_diff_con %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_diff_con <- pcss_diff_con %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_diff_con <- pcss_diff_con %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# difficulty remembering - symptom 21
+
+pcss_diff_rem <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_difficulty_remembering),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_diff_rem <- pcss_diff_rem %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_diff_rem <- pcss_diff_rem %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_diff_rem <- pcss_diff_rem %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_diff_rem <- pcss_diff_rem %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# visual problems - symptom 22
+
+pcss_visual_problems <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, pcss_visual_problems),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_visual_problems <- pcss_visual_problems %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_visual_problems <- pcss_visual_problems %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_visual_problems <- pcss_visual_problems %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_visual_problems <- pcss_visual_problems %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# total pcss score
+
+pcss_total_score <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, total_symptom_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_total_score <- pcss_total_score %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_total_score <- pcss_total_score %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_total_score <- pcss_total_score %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_total_score <- pcss_total_score %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# cluster 1 - headache-migraine 
+
+pcss_headache_migraine_cluster <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, headache_migraine_cluster_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_headache_migraine <- pcss_headache_migraine_cluster %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_headache_migraine <- pcss_headache_migraine_cluster %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_headache_migraine <- pcss_headache_migraine_cluster %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_headache_migraine <- pcss_headache_migraine_cluster %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# cluster 2 - cognitive 
+
+pcss_cognitive_cluster <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, cognitive_cluster_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_cognitive_cluster <- pcss_cognitive_cluster %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_cognitive_cluster <- pcss_cognitive_cluster %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_cognitive_cluster <- pcss_cognitive_cluster %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_cognitive_cluster <- pcss_cognitive_cluster %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# cluster 3 - anxiety-mood
+
+pcss_anxiety_mood_cluster <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, anxiety_mood_cluster_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_anxiety_mood_cluster <- pcss_anxiety_mood_cluster %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_anxiety_mood_cluster <- pcss_anxiety_mood_cluster %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_anxiety_mood_cluster <- pcss_anxiety_mood_cluster %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_anxiety_mood_cluster <- pcss_anxiety_mood_cluster %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# cluster 4 - ocular motor
+
+pcss_ocular_motor_cluster <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, ocular_motor_cluster_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_ocular_motor_cluster <- pcss_ocular_motor_cluster %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_ocular_motor_cluster <- pcss_ocular_motor_cluster %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_ocular_motor_cluster <- pcss_ocular_motor_cluster %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_ocular_motor_cluster <- pcss_ocular_motor_cluster %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# cluster 5 - vestibular
+
+pcss_vestibular_cluster <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, vestibular_cluster_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_vestibular_cluster <- pcss_vestibular_cluster %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_vestibular_cluster <- pcss_vestibular_cluster %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_vestibular_cluster <- pcss_vestibular_cluster %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_vestibular_cluster <- pcss_vestibular_cluster %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# cluster 6 - sleep 
+
+pcss_sleep_cluster <- impact %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, passport_id),
+    names_from = test_type,
+    values_from = c(test_date, sleep_cluster_score),
+  ) %>% 
+  arrange(passport_id) %>% 
+  janitor::clean_names()
+
+one_pi_sleep_cluster <- pcss_sleep_cluster %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_sleep_cluster <- pcss_sleep_cluster %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_sleep_cluster <- pcss_sleep_cluster %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_sleep_cluster <- pcss_sleep_cluster %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+
+```
+
+```{r, include=FALSE}
+# widen age
+
+# keep this for now, but should be able to join data set without widening age and other demographic variables 
+
+impact_age <- wide_variable(impact, passport_id, test_type, test_date, age)
+
+one_pi_age <- impact_age %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_age <- impact_age %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_age <- impact_age %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_age <- impact_age %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+```
+
+```{r, include=FALSE}
+# create object containing demographic variables and join data 
+
+impact_demographics <- impact %>% 
+  select(c(1:8))
+
+```
+
+```{r, include=FALSE}
+# current sport
+
+impact_current_sport <- wide_variable(impact, passport_id, test_type, test_date, current_sport)
+
+one_pi_current_sport <- impact_current_sport %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) 
+
+two_pi_current_sport <- impact_current_sport %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) 
+
+three_pi_current_sport <- impact_current_sport %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) 
+
+four_pi_current_sport <- impact_current_sport %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) 
+```
+
+```{r, include=FALSE}
+# number of concussions
+
+impact_numb_con <- wide_variable(impact, passport_id, test_type, test_date, number_of_concussions)
+
+one_pi_numb_con <- impact_numb_con %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) 
+
+two_pi_numb_con <- impact_numb_con %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) 
+
+three_pi_numb_con <- impact_numb_con %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) 
+
+four_pi_numb_con <- impact_numb_con %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) 
+```
+
+```{r, include=FALSE}
+# gender
+
+impact_gender <- wide_variable(impact, passport_id, test_type, test_date, gender)
+
+one_pi_gender <- impact_gender %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) 
+
+two_pi_gender <- impact_gender %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) 
+
+three_pi_gender <- impact_gender %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) 
+
+four_pi_gender <- impact_gender %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) 
+```
+
+```{r, include=FALSE}
+# last name
+
+impact_last_name <- wide_variable(impact, passport_id, test_type, test_date, last_name)
+
+one_pi_last_name <- impact_last_name %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) 
+
+two_pi_last_name <- impact_last_name %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) 
+
+three_pi_last_name <- impact_last_name %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) 
+
+four_pi_last_name <- impact_last_name %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) 
+```
+
+```{r, include=FALSE}
+# first name
+
+impact_first_name <- wide_variable(impact, passport_id, test_type, test_date, first_name)
+
+one_pi_first_name <- impact_first_name %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) 
+
+two_pi_first_name <- impact_first_name %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) 
+
+three_pi_first_name <- impact_first_name %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) 
+
+four_pi_first_name <- impact_first_name %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) 
+```
+
+
+```{r, include=FALSE}
+# join symptom scores 
+
+# one post injury
+
+one_pi_j1 <- left_join(one_pi_headache, one_pi_nausea)
+one_pi_j2 <- left_join(one_pi_j1, one_pi_vomiting)
+one_pi_j3 <- left_join(one_pi_j2, one_pi_balance_problems)
+one_pi_j4 <- left_join(one_pi_j3, one_pi_dizziness)
+one_pi_j5 <- left_join(one_pi_j4, one_pi_fatigue)
+one_pi_j6 <- left_join(one_pi_j5, one_pi_tfs)
+one_pi_j7 <- left_join(one_pi_j6, one_pi_ex_sleep)
+one_pi_j8 <- left_join(one_pi_j7, one_pi_loss_sleep)
+one_pi_j9 <- left_join(one_pi_j8, one_pi_drowsiness)
+one_pi_j10 <- left_join(one_pi_j9, one_pi_light_sen)
+one_pi_j11 <- left_join(one_pi_j10, one_pi_noise_sen)
+one_pi_j12 <- left_join(one_pi_j11, one_pi_irritability)
+one_pi_j13 <- left_join(one_pi_j12, one_pi_sadness)
+one_pi_j14 <- left_join(one_pi_j13, one_pi_nervousness)
+one_pi_j15 <- left_join(one_pi_j14, one_pi_emotional)
+one_pi_j16 <- left_join(one_pi_j15, one_pi_numbness)
+one_pi_j17 <- left_join(one_pi_j16, one_pi_feeling_slow)
+one_pi_j18 <- left_join(one_pi_j17, one_pi_feeling_foggy)
+one_pi_j19 <- left_join(one_pi_j18, one_pi_diff_con)
+one_pi_j20 <- left_join(one_pi_j19, one_pi_diff_rem)
+one_pi_j21 <- left_join(one_pi_j20, one_pi_visual_problems)
+one_pi_j22 <- left_join(one_pi_j21, one_pi_total_score)
+one_pi_j23 <- left_join(one_pi_j22, one_pi_headache_migraine)
+one_pi_j24 <- left_join(one_pi_j23, one_pi_cognitive_cluster)
+one_pi_j25 <- left_join(one_pi_j24, one_pi_anxiety_mood_cluster)
+one_pi_j26 <- left_join(one_pi_j25, one_pi_ocular_motor_cluster)
+one_pi_j27 <- left_join(one_pi_j26, one_pi_vestibular_cluster)
+one_pi_j28 <- left_join(one_pi_j27, one_pi_sleep_cluster)
+one_pi_j29 <- right_join(one_pi_numb_con, one_pi_j28)
+one_pi_j30 <- right_join(one_pi_current_sport, one_pi_j29)
+one_pi_j31 <- right_join(one_pi_age, one_pi_j30)
+one_pi_j32 <- right_join(one_pi_gender, one_pi_j31)
+one_pi_j33 <- right_join(one_pi_last_name, one_pi_j32)
+one_pi_j34 <- right_join(one_pi_first_name, one_pi_j33)
+
+all_one_pi_pcss <- one_pi_j34 %>% 
+  rename(first_name = first_name_post_injury_1,
+         last_name = last_name_post_injury_1,
+         gender = gender_post_injury_1,
+         age = age_post_injury_1)
+
+```
+
+```{r, include=FALSE}
+# two post injuries
+
+two_pi_j1 <- left_join(two_pi_headache, two_pi_nausea)
+two_pi_j2 <- left_join(two_pi_j1, two_pi_vomiting)
+two_pi_j3 <- left_join(two_pi_j2, two_pi_balance_problems)
+two_pi_j4 <- left_join(two_pi_j3, two_pi_dizziness)
+two_pi_j5 <- left_join(two_pi_j4, two_pi_fatigue)
+two_pi_j6 <- left_join(two_pi_j5, two_pi_tfs)
+two_pi_j7 <- left_join(two_pi_j6, two_pi_ex_sleep)
+two_pi_j8 <- left_join(two_pi_j7, two_pi_loss_sleep)
+two_pi_j9 <- left_join(two_pi_j8, two_pi_drowsiness)
+two_pi_j10 <- left_join(two_pi_j9, two_pi_light_sen)
+two_pi_j11 <- left_join(two_pi_j10, two_pi_noise_sen)
+two_pi_j12 <- left_join(two_pi_j11, two_pi_irritability)
+two_pi_j13 <- left_join(two_pi_j12, two_pi_sadness)
+two_pi_j14 <- left_join(two_pi_j13, two_pi_nervousness)
+two_pi_j15 <- left_join(two_pi_j14, two_pi_emotional)
+two_pi_j16 <- left_join(two_pi_j15, two_pi_numbness)
+two_pi_j17 <- left_join(two_pi_j16, two_pi_feeling_slow)
+two_pi_j18 <- left_join(two_pi_j17, two_pi_feeling_foggy)
+two_pi_j19 <- left_join(two_pi_j18, two_pi_diff_con)
+two_pi_j20 <- left_join(two_pi_j19, two_pi_diff_rem)
+two_pi_j21 <- left_join(two_pi_j20, two_pi_visual_problems)
+two_pi_j22 <- left_join(two_pi_j21, two_pi_total_score)
+two_pi_j23 <- left_join(two_pi_j22, two_pi_headache_migraine)
+two_pi_j24 <- left_join(two_pi_j23, two_pi_cognitive_cluster)
+two_pi_j25 <- left_join(two_pi_j24, two_pi_anxiety_mood_cluster)
+two_pi_j26 <- left_join(two_pi_j25, two_pi_ocular_motor_cluster)
+two_pi_j27 <- left_join(two_pi_j26, two_pi_vestibular_cluster)
+two_pi_j28 <- left_join(two_pi_j27, two_pi_sleep_cluster)
+two_pi_j29 <- right_join(two_pi_numb_con, two_pi_j28)
+two_pi_j30 <- right_join(two_pi_current_sport, two_pi_j29)
+two_pi_j31 <- right_join(two_pi_age, two_pi_j30)
+two_pi_j32 <- right_join(two_pi_gender, two_pi_j31)
+two_pi_j33 <- right_join(two_pi_last_name, two_pi_j32)
+two_pi_j34 <- right_join(two_pi_first_name, two_pi_j33)
+
+all_two_pi_pcss <- two_pi_j34 %>% 
+  select(-c(last_name_post_injury_2, first_name_post_injury_2, gender_post_injury_2)) %>% 
+  rename(first_name = first_name_post_injury_1,
+         last_name = last_name_post_injury_1,
+         gender = gender_post_injury_1)
+
+
+
+```
+
+```{r, include=FALSE}
+# three post injuries
+
+three_pi_j1 <- left_join(three_pi_headache, three_pi_nausea)
+three_pi_j2 <- left_join(three_pi_j1, three_pi_vomiting)
+three_pi_j3 <- left_join(three_pi_j2, three_pi_balance_problems)
+three_pi_j4 <- left_join(three_pi_j3, three_pi_dizziness)
+three_pi_j5 <- left_join(three_pi_j4, three_pi_fatigue)
+three_pi_j6 <- left_join(three_pi_j5, three_pi_tfs)
+three_pi_j7 <- left_join(three_pi_j6, three_pi_ex_sleep)
+three_pi_j8 <- left_join(three_pi_j7, three_pi_loss_sleep)
+three_pi_j9 <- left_join(three_pi_j8, three_pi_drowsiness)
+three_pi_j10 <- left_join(three_pi_j9, three_pi_light_sen)
+three_pi_j11 <- left_join(three_pi_j10, three_pi_noise_sen)
+three_pi_j12 <- left_join(three_pi_j11, three_pi_irritability)
+three_pi_j13 <- left_join(three_pi_j12, three_pi_sadness)
+three_pi_j14 <- left_join(three_pi_j13, three_pi_nervousness)
+three_pi_j15 <- left_join(three_pi_j14, three_pi_emotional)
+three_pi_j16 <- left_join(three_pi_j15, three_pi_numbness)
+three_pi_j17 <- left_join(three_pi_j16, three_pi_feeling_slow)
+three_pi_j18 <- left_join(three_pi_j17, three_pi_feeling_foggy)
+three_pi_j19 <- left_join(three_pi_j18, three_pi_diff_con)
+three_pi_j20 <- left_join(three_pi_j19, three_pi_diff_rem)
+three_pi_j21 <- left_join(three_pi_j20, three_pi_visual_problems)
+three_pi_j22 <- left_join(three_pi_j21, three_pi_total_score)
+three_pi_j23 <- left_join(three_pi_j22, three_pi_headache_migraine)
+three_pi_j24 <- left_join(three_pi_j23, three_pi_cognitive_cluster)
+three_pi_j25 <- left_join(three_pi_j24, three_pi_anxiety_mood_cluster)
+three_pi_j26 <- left_join(three_pi_j25, three_pi_ocular_motor_cluster)
+three_pi_j27 <- left_join(three_pi_j26, three_pi_vestibular_cluster)
+three_pi_j28 <- left_join(three_pi_j27, three_pi_sleep_cluster)
+three_pi_j29 <- right_join(three_pi_numb_con, three_pi_j28)
+three_pi_j30 <- right_join(three_pi_current_sport, three_pi_j29)
+three_pi_j31 <- right_join(three_pi_age, three_pi_j30)
+three_pi_j32 <- right_join(three_pi_gender, three_pi_j31)
+three_pi_j33 <- right_join(three_pi_last_name, three_pi_j32)
+three_pi_j34 <- right_join(three_pi_first_name, three_pi_j33)
+
+all_three_pi_pcss <- three_pi_j34 %>% 
+  select(-c(last_name_post_injury_2, 
+            last_name_post_injury_3,
+            first_name_post_injury_2,
+            first_name_post_injury_3,
+            gender_post_injury_2,
+            gender_post_injury_3)) %>% 
+  rename(first_name = first_name_post_injury_1,
+         last_name = last_name_post_injury_1,
+         gender = gender_post_injury_1)
+
+```
+
+```{r, include=FALSE}
+# four post injuries
+
+four_pi_j1 <- left_join(four_pi_headache, four_pi_nausea)
+four_pi_j2 <- left_join(four_pi_j1, four_pi_vomiting)
+four_pi_j3 <- left_join(four_pi_j2, four_pi_balance_problems)
+four_pi_j4 <- left_join(four_pi_j3, four_pi_dizziness)
+four_pi_j5 <- left_join(four_pi_j4, four_pi_fatigue)
+four_pi_j6 <- left_join(four_pi_j5, four_pi_tfs)
+four_pi_j7 <- left_join(four_pi_j6, four_pi_ex_sleep)
+four_pi_j8 <- left_join(four_pi_j7, four_pi_loss_sleep)
+four_pi_j9 <- left_join(four_pi_j8, four_pi_drowsiness)
+four_pi_j10 <- left_join(four_pi_j9, four_pi_light_sen)
+four_pi_j11 <- left_join(four_pi_j10, four_pi_noise_sen)
+four_pi_j12 <- left_join(four_pi_j11, four_pi_irritability)
+four_pi_j13 <- left_join(four_pi_j12, four_pi_sadness)
+four_pi_j14 <- left_join(four_pi_j13, four_pi_nervousness)
+four_pi_j15 <- left_join(four_pi_j14, four_pi_emotional)
+four_pi_j16 <- left_join(four_pi_j15, four_pi_numbness)
+four_pi_j17 <- left_join(four_pi_j16, four_pi_feeling_slow)
+four_pi_j18 <- left_join(four_pi_j17, four_pi_feeling_foggy)
+four_pi_j19 <- left_join(four_pi_j18, four_pi_diff_con)
+four_pi_j20 <- left_join(four_pi_j19, four_pi_diff_rem)
+four_pi_j21 <- left_join(four_pi_j20, four_pi_visual_problems)
+four_pi_j22 <- left_join(four_pi_j21, four_pi_total_score)
+four_pi_j23 <- left_join(four_pi_j22, four_pi_headache_migraine)
+four_pi_j24 <- left_join(four_pi_j23, four_pi_cognitive_cluster)
+four_pi_j25 <- left_join(four_pi_j24, four_pi_anxiety_mood_cluster)
+four_pi_j26 <- left_join(four_pi_j25, four_pi_ocular_motor_cluster)
+four_pi_j27 <- left_join(four_pi_j26, four_pi_vestibular_cluster)
+four_pi_j28 <- left_join(four_pi_j27, four_pi_sleep_cluster)
+four_pi_j29 <- right_join(four_pi_numb_con, four_pi_j28)
+four_pi_j30 <- right_join(four_pi_current_sport, four_pi_j29)
+four_pi_j31 <- right_join(four_pi_age, four_pi_j30)
+four_pi_j32 <- right_join(four_pi_gender, four_pi_j31)
+four_pi_j33 <- right_join(four_pi_last_name, four_pi_j32)
+four_pi_j34 <- right_join(four_pi_first_name, four_pi_j33)
+
+all_four_pi_pcss <- four_pi_j34 %>% 
+  select(-c(last_name_post_injury_2, 
+            last_name_post_injury_3,
+            last_name_post_injury_4,
+            first_name_post_injury_2,
+            first_name_post_injury_3,
+            first_name_post_injury_4,
+            gender_post_injury_2,
+            gender_post_injury_3,
+            gender_post_injury_4)) %>% 
+  rename(first_name = first_name_post_injury_1,
+         last_name = last_name_post_injury_1,
+         gender = gender_post_injury_1)
+
+```
+
+```{r, include=FALSE}
+# add impact test scores 
+
+# verbal memory 
+
+impact_verbal_memory <- wide_variable(impact, passport_id, test_type, test_date, verbal_memory)
+
+one_pi_verbal_memory <- impact_verbal_memory %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_verbal_memory <- impact_verbal_memory %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_verbal_memory <- impact_verbal_memory %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_verbal_memory <- impact_verbal_memory %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+```
+
+```{r, include=FALSE}
+# add impact test scores 
+
+# visual memory 
+
+impact_visual_memory <- wide_variable(impact, passport_id, test_type, test_date, visual_memory)
+
+one_pi_visual_memory <- impact_visual_memory %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_visual_memory <- impact_visual_memory %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_visual_memory <- impact_visual_memory %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_visual_memory <- impact_visual_memory %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+```
+
+```{r, include=FALSE}
+# add impact test scores 
+
+# visual motor
+
+impact_visual_motor <- wide_variable(impact, passport_id, test_type, test_date, visual_motor)
+
+one_pi_visual_motor <- impact_visual_motor %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_visual_motor <- impact_visual_motor %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_visual_motor <- impact_visual_motor %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_visual_motor <- impact_visual_motor %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+```
+
+```{r, include=FALSE}
+# add impact test scores 
+
+# reaction time 
+
+impact_reaction_time <- wide_variable(impact, passport_id, test_type, test_date, reaction_time)
+
+one_pi_reaction_time <- impact_reaction_time %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_reaction_time <- impact_reaction_time %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_reaction_time <- impact_reaction_time %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_reaction_time <- impact_reaction_time %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+```
+
+```{r, include=FALSE}
+# add impact test scores 
+
+# impulse control
+
+impact_impulse_control <- wide_variable(impact, passport_id, test_type, test_date, impulse_control)
+
+one_pi_impulse_control <- impact_impulse_control %>% 
+  select(c(1:3, 7)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+two_pi_impulse_control <- impact_impulse_control %>% 
+  select(c(1:4, 7:8)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+three_pi_impulse_control <- impact_impulse_control %>% 
+  select(c(1:5, 7:9)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+four_pi_impulse_control <- impact_impulse_control %>% 
+  select(c(1:6, 7:10)) %>% 
+  arrange(passport_id) %>% 
+  na.omit()
+
+```
+
+```{r, include=FALSE}
+
+#join test scores 
+
+# one test 
+
+one_test_j1 <- left_join(one_pi_verbal_memory, one_pi_visual_memory)
+one_test_j2 <- left_join(one_test_j1, one_pi_visual_motor)
+one_test_j3 <- left_join(one_test_j2, one_pi_reaction_time)
+one_pi_test_scores <- left_join(one_test_j3, one_pi_impulse_control)
+
+```
+
+```{r, include=FALSE}
+
+#join test scores 
+
+# two tests
+
+two_test_j1 <- left_join(two_pi_verbal_memory, two_pi_visual_memory)
+two_test_j2 <- left_join(two_test_j1, two_pi_visual_motor)
+two_test_j3 <- left_join(two_test_j2, two_pi_reaction_time)
+two_pi_test_scores <- left_join(two_test_j3, two_pi_impulse_control)
+
+```
+
+```{r, include=FALSE}
+
+#join test scores 
+
+# three tests 
+
+three_test_j1 <- left_join(three_pi_verbal_memory, three_pi_visual_memory)
+three_test_j2 <- left_join(three_test_j1, three_pi_visual_motor)
+three_test_j3 <- left_join(three_test_j2, three_pi_reaction_time)
+three_pi_test_scores <- left_join(three_test_j3, three_pi_impulse_control)
+
+```
+
+```{r, include=FALSE}
+
+#join test scores 
+
+# four tests
+
+four_test_j1 <- left_join(four_pi_verbal_memory, four_pi_visual_memory)
+four_test_j2 <- left_join(four_test_j1, four_pi_visual_motor)
+four_test_j3 <- left_join(four_test_j2, four_pi_reaction_time)
+four_pi_test_scores <- left_join(four_test_j3, four_pi_impulse_control)
+
+```
+
+```{r, include=FALSE}
+# add test scores to rest of data sets 
+
+all_one_pi_pcss <- left_join(all_one_pi_pcss, one_pi_test_scores) 
+all_two_pi_pcss <- left_join(all_two_pi_pcss, two_pi_test_scores)
+all_three_pi_pcss <- left_join(all_three_pi_pcss, three_pi_test_scores)
+all_four_pi_pcss <- left_join(all_four_pi_pcss, four_pi_test_scores)
+
+str(all_four_pi_pcss)
+# mutate test date variable to be able to calculate duration of time between tests
+# spreading code worked for the most part 
+# create variables for duration of time between test dates across four data sets
+# calculate mean duration of time and remove outlier data based on the mean 
+
+
+```
+
+```{r, include=FALSE}
+# mutate date variables 
+
+# one pi 
+all_one_pi_pcss$test_date_post_injury_1 <- as.Date(all_one_pi_pcss$test_date_post_injury_1, 
+                                                   format = "%m/%d/%Y")
+
+str(all_one_pi_pcss)
+
+# two pi 
+all_two_pi_pcss$test_date_post_injury_1 <- as.Date(all_two_pi_pcss$test_date_post_injury_1,
+                                                   format = "%m/%d/%Y")
+all_two_pi_pcss$test_date_post_injury_2 <- as.Date(all_two_pi_pcss$test_date_post_injury_2,
+                                                   format = "%m/%d/%Y")
+
+# three pi
+
+all_three_pi_pcss$test_date_post_injury_1 <- as.Date(all_three_pi_pcss$test_date_post_injury_1,
+                                                     format = "%m/%d/%Y")
+all_three_pi_pcss$test_date_post_injury_2 <- as.Date(all_three_pi_pcss$test_date_post_injury_2,
+                                                     format = "%m/%d/%Y")
+all_three_pi_pcss$test_date_post_injury_3 <- as.Date(all_three_pi_pcss$test_date_post_injury_3,
+                                                     format = "%m/%d/%Y")
+
+# four pi
+
+all_four_pi_pcss$test_date_post_injury_1 <- as.Date(all_four_pi_pcss$test_date_post_injury_1,
+                                                    format = "%m/%d/%Y")
+all_four_pi_pcss$test_date_post_injury_2 <- as.Date(all_four_pi_pcss$test_date_post_injury_2,
+                                                    format = "%m/%d/%Y")
+all_four_pi_pcss$test_date_post_injury_3 <- as.Date(all_four_pi_pcss$test_date_post_injury_3,
+                                                    format = "%m/%d/%Y")
+all_four_pi_pcss$test_date_post_injury_4 <- as.Date(all_four_pi_pcss$test_date_post_injury_4,
+                                                    format = "%m/%d/%Y")
+
+```
+
+```{r, include=FALSE}
+# create variables for duration of time between test date 
+
+# two pi 
+
+all_two_pi_pcss <- all_two_pi_pcss %>% 
+  mutate(dys_btwn_tst_dts = test_date_post_injury_2 - test_date_post_injury_1) %>% 
+  mutate(dys_btwn_tst_dts = as.numeric(dys_btwn_tst_dts))
+
+create_react_time(all_two_pi_pcss, dys_btwn_tst_dts)
+
+# filter out cases where the days between test dates is less than 0 days and more than 30 days
+all_two_pi_pcss <- all_two_pi_pcss %>% 
+  filter(dys_btwn_tst_dts >= 0 & dys_btwn_tst_dts <= 30)
+
+create_react_time(all_two_pi_pcss, dys_btwn_tst_dts)
+
+all_two_pi_pcss %>% 
+  count(row)
+
+# question to ask group: would it be best to just include initial injuries? it appears the code accurately separates cases of multiple injuries for the most part, but my spectulation is there was the occasional error with data entry (e.g. test number being mislabled where a post-injury 3 was called a post-injury 1) that creates a little bit of bias in the data set. if we just include initial injuries, we'd still have just under 5000 observations for individuals who completed two tests. 
+```
+
+```{r, include=FALSE}
+# three pi 
+
+all_three_pi_pcss <- all_three_pi_pcss %>% 
+  mutate(dys_btwn_tst_1_2 = test_date_post_injury_2 - test_date_post_injury_1,
+         dys_btwn_tst_2_3 = test_date_post_injury_3 - test_date_post_injury_2,
+         dys_btwn_tst_1_3 = test_date_post_injury_3 - test_date_post_injury_1) %>% 
+  mutate(dys_btwn_tst_1_2 = as.numeric(dys_btwn_tst_1_2),
+         dys_btwn_tst_2_3 = as.numeric(dys_btwn_tst_2_3),
+         dys_btwn_tst_1_3 = as.numeric(dys_btwn_tst_1_3))
+
+create_react_time(all_three_pi_pcss, dys_btwn_tst_1_2)
+create_react_time(all_three_pi_pcss, dys_btwn_tst_2_3)
+create_react_time(all_three_pi_pcss, dys_btwn_tst_1_3)
+
+# filter out cases where the days between test 1 and 2 is 30 days, 2 and 3 is 30 days, and 1 and 3 is 60 days
+all_three_pi_pcss <- all_three_pi_pcss %>% 
+  filter(dys_btwn_tst_1_2 >= 0 & dys_btwn_tst_1_2 <= 30,
+         dys_btwn_tst_2_3 >= 0 & dys_btwn_tst_2_3 <= 30,
+         dys_btwn_tst_1_3 >= 0 & dys_btwn_tst_1_3 <= 60)
+
+create_react_time(all_three_pi_pcss, dys_btwn_tst_1_2)
+create_react_time(all_three_pi_pcss, dys_btwn_tst_2_3)
+create_react_time(all_three_pi_pcss, dys_btwn_tst_1_3)
+
+all_three_pi_pcss %>% 
+  count(row)
+
+# would have 2145 cases if we remove individuals with multiple entries 
+
+```
+
+```{r, include=FALSE}
+# four pi 
+
+all_four_pi_pcss <- all_four_pi_pcss %>% 
+  mutate(dys_btwn_tst_1_2 = test_date_post_injury_2 - test_date_post_injury_1,
+         dys_btwn_tst_2_3 = test_date_post_injury_3 - test_date_post_injury_2,
+         dys_btwn_tst_3_4 = test_date_post_injury_4 - test_date_post_injury_3,
+         dys_btwn_tst_1_4 = test_date_post_injury_4 - test_date_post_injury_1) %>% 
+  mutate(dys_btwn_tst_1_2 = as.numeric(dys_btwn_tst_1_2),
+         dys_btwn_tst_2_3 = as.numeric(dys_btwn_tst_2_3),
+         dys_btwn_tst_3_4 = as.numeric(dys_btwn_tst_3_4),
+         dys_btwn_tst_1_4 = as.numeric(dys_btwn_tst_1_4))
+
+create_react_time(all_four_pi_pcss, dys_btwn_tst_1_2)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_2_3)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_3_4)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_1_4)
+
+# filter out cases where the days between test 1 and 2 is 30 days, 2 and 3 is 30 days, and 3 and 4 is 30 days, and tests 1 and 4 is 90 days
+all_four_pi_pcss <- all_four_pi_pcss %>% 
+  filter(dys_btwn_tst_1_2 >= 0 & dys_btwn_tst_1_2 <= 30,
+         dys_btwn_tst_2_3 >= 0 & dys_btwn_tst_2_3 <= 30,
+         dys_btwn_tst_3_4 >= 0 & dys_btwn_tst_3_4 <= 30,
+         dys_btwn_tst_1_4 >= 0 & dys_btwn_tst_1_4 <= 90)
+
+create_react_time(all_four_pi_pcss, dys_btwn_tst_1_2)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_2_3)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_3_4)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_1_4)
+
+
+all_four_pi_pcss %>% 
+  count(row)
+
+# would have 771 cases if we remove individuals with multiple entries 
+
+```
+
+```{r, include=FALSE}
+# output versions of pcss/impact data frames prior to joining with sims 
+
+write.csv(all_one_pi_pcss, "one_impact_pcss_test.csv")
+write.csv(all_two_pi_pcss, "two_impact_pcss_tests.csv")
+write.csv(all_three_pi_pcss, "three_impact_pcss_tests.csv")
+write.csv(all_four_pi_pcss, "four_impact_pcss_tests.csv")
+
+```
+
+
+```{r, include=FALSE}
+# Now to try to join pcss data frames with SIMS data set
+
+head(all_leagues)
+
+# step 1 - isolate concussion injuries 
+# step 2 - create variables for duration of time between RTP checkpoints 
+# step 3 - pivot_wider variable by variable by student_id
+
+all_leagues <- all_leagues %>% 
+  filter(injury == "Head Concussion") %>% 
+  mutate(dys_btwn_onset_rtp_7 = rtp_protocol_7 - onset,
+         dys_btwn_onset_rtp_2 = rtp_protocol_2_return_to_school_full_time - onset,
+         dys_btwn_rtp_2_rtp_7 = rtp_protocol_7 - rtp_protocol_2_return_to_school_full_time) %>% 
+  mutate(dys_btwn_onset_rtp_7 = as.numeric(dys_btwn_onset_rtp_7),
+         dys_btwn_onset_rtp_2 = as.numeric(dys_btwn_onset_rtp_2),
+         dys_btwn_rtp_2_rtp_7 = as.numeric(dys_btwn_rtp_2_rtp_7))
+
+mean_2(all_leagues$dys_btwn_onset_rtp_7)
+mean_2(all_leagues$dys_btwn_onset_rtp_2)
+mean_2(all_leagues$dys_btwn_rtp_2_rtp_7)
+
+# filter age range for date ranges 
+
+all_leagues <- all_leagues %>% 
+  filter(dys_btwn_onset_rtp_7 >= 0 & dys_btwn_onset_rtp_7 <= 100,
+         dys_btwn_onset_rtp_2 >= 0 & dys_btwn_onset_rtp_2 <= 30,
+         dys_btwn_rtp_2_rtp_7 >= 0 & dys_btwn_rtp_2_rtp_7 <= 70)
+
+```
+
+
+```{r, include=FALSE}
+# use student_id
+
+all_leagues %>% 
+  count(student_id)
+
+
+# create function to pivot all sims variables wider 
+
+test_sims_wide <- all_leagues %>% 
+  group_by(student_id) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, student_id),
+    #names_from = injury,
+    values_from = c(onset, sport),
+  ) %>% 
+  arrange(student_id) %>% 
+  janitor::clean_names()
+
+sims_wide <- function(df, a, b, c) {
+  df %>% 
+  group_by({{a}}) %>% 
+  mutate(row = row_number()) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    id_cols = c(row, {{a}}),
+    values_from = c({{b}}, {{c}}),
+  ) %>% 
+  arrange({{a}}) %>% 
+  janitor::clean_names()
+}
+
+test_sims_wide2 <- sims_wide(all_leagues, student_id, onset, sport)
+
+```
+
+```{r, include=FALSE}
+# use function to spread each sims variable
+
+#dataset
+
+sims_dataset <- sims_wide(all_leagues, student_id, onset, dataset)
+
+# school year
+
+sims_school_year <- sims_wide(all_leagues, student_id, onset, school_year)
+
+# last name
+
+sims_last_name <- sims_wide(all_leagues, student_id, onset, last_name)
+
+# first name
+
+sims_first_name <- sims_wide(all_leagues, student_id, onset, first_name)
+
+# school 
+
+sims_school <- sims_wide(all_leagues, student_id, onset, school)
+
+# league 
+
+sims_league <- sims_wide(all_leagues, student_id, onset, league)
+
+# gender
+
+sims_gender <- sims_wide(all_leagues, student_id, onset, gender)
+
+# age
+
+sims_age <- sims_wide(all_leagues, student_id, onset, age)
+
+# sport 
+
+sims_sport <- sims_wide(all_leagues, student_id, onset, sport)
+
+# level 
+
+sims_level <- sims_wide(all_leagues, student_id, onset, level)
+
+# injury 
+
+sims_injury <- sims_wide(all_leagues, student_id, onset, injury)
+
+# rtp protocol 7
+
+sims_rtp_7 <- sims_wide(all_leagues, student_id, onset, rtp_protocol_7)
+
+# days missed 
+
+sims_days_missed <- sims_wide(all_leagues, student_id, onset, days_missed)
+
+# rtp 1
+
+sims_rtp_1 <- sims_wide(all_leagues, student_id, onset, rtp_protocol_1_cognitive_physical_rest)
+
+# rtp 2 
+
+sims_rtp_2 <- sims_wide(all_leagues, student_id, onset,
+                        rtp_protocol_2_return_to_school_full_time)
+
+# rtp 3
+
+sims_rtp_3 <- sims_wide(all_leagues, student_id, onset,
+                        rtp_protocol_3_light_exercise)
+
+# rtp 4
+
+sims_rtp_4 <- sims_wide(all_leagues, student_id, onset,
+                        rtp_protocol_4_running_no_equipment)
+
+# rtp 5
+
+sims_rtp_5 <- sims_wide(all_leagues, student_id, onset,
+                        rtp_protocol_5_non_contact_drills)
+
+# rtp 6
+
+sims_rtp_6 <- sims_wide(all_leagues, student_id, onset, 
+                        rtp_protocol_6_full_contact_practice)
+
+# sims rtp 7a
+
+sims_rtp_7a <- sims_wide(all_leagues, student_id, onset, 
+                         rtp_protocol_7_returned_to_full_unrestricted_activity)
+
+# days between onset and step 7 7
+
+sims_onset_rtp_7 <- sims_wide(all_leagues, student_id, onset, 
+                              dys_btwn_onset_rtp_7)
+
+# days between onset and step 2
+
+sims_onset_rtp_2 <- sims_wide(all_leagues, student_id, onset, 
+                              dys_btwn_onset_rtp_2)
+
+# days between rtp 2 and 7 
+
+sims_rtp_2_7 <- sims_wide(all_leagues, student_id, onset, 
+                              dys_btwn_rtp_2_rtp_7)
+
+
+```
+
+```{r, include=FALSE}
+# rejoin sims data sets 
+
+sims_j1 <- left_join(sims_dataset, sims_school_year)
+sims_j2 <- left_join(sims_j1, sims_last_name)
+sims_j3 <- left_join(sims_j2, sims_first_name)
+sims_j4 <- left_join(sims_j3, sims_school)
+sims_j5 <- left_join(sims_j4, sims_league)
+sims_j6 <- left_join(sims_j5, sims_gender)
+sims_j7 <- left_join(sims_j6, sims_age)
+sims_j8 <- left_join(sims_j7, sims_sport)
+sims_j9 <- left_join(sims_j8, sims_level)
+sims_j10 <- left_join(sims_j9, sims_injury)
+sims_j11 <- left_join(sims_j10, sims_rtp_7)
+sims_j12 <- left_join(sims_j11, sims_rtp_1)
+sims_j13 <- left_join(sims_j12, sims_rtp_2)
+sims_j14 <- left_join(sims_j13, sims_rtp_3)
+sims_j15 <- left_join(sims_j14, sims_rtp_4)
+sims_j16 <- left_join(sims_j15, sims_rtp_5)
+sims_j17 <- left_join(sims_j16, sims_rtp_6)
+sims_j18 <- left_join(sims_j17, sims_rtp_7a)
+sims_j19 <- left_join(sims_j18, sims_onset_rtp_7)
+sims_j20 <- left_join(sims_j19, sims_onset_rtp_2)
+all_clean_sims <- left_join(sims_j20, sims_rtp_2_7)
+
+all_clean_sims <- all_clean_sims %>% 
+  mutate(last_name = str_to_title(last_name),
+         first_name = str_to_title(first_name))
+
+
+write.csv(all_clean_sims, "final_sims_data.csv")
+
+```
+
+```{r, include=FALSE}
+# join sims and four Impact data sets
+
+# one pi pcss is one impact data frame with more observations than sims 
+
+
+
+one_pi_pcss_sims <- right_join(all_clean_sims, all_one_pi_pcss)
+
+# 10,042 observations before removing missing data
+
+one_pi_pcss_sims <- one_pi_pcss_sims %>% 
+  select(1:3, 27, 4:26, 28:63) 
+
+
+# create variable for days between onset to post injury test 1
+
+one_pi_pcss_sims <- one_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_1 = test_date_post_injury_1 - onset) %>% 
+  mutate(dys_btwn_onset_test_1 = as.numeric(dys_btwn_onset_test_1)) %>% 
+  select(c(1:4, 64, 5:63))
+
+
+mean_2(one_pi_pcss_sims$dys_btwn_onset_test_1)
+
+# mean of 6.5 days from injury to first test 
+
+# filter days between injury and test 1 less than 0 and more than 30
+
+one_pi_pcss_sims <- one_pi_pcss_sims %>% 
+  filter(dys_btwn_onset_test_1 >= 0 & dys_btwn_onset_test_1 <= 30)
+
+# reduced to 257 individuals 
+
+write.csv(one_pi_pcss_sims, "one_impact_test_sims_merge.csv")
+
+
+```
+
+```{r, include=FALSE}
+two_pi_pcss_sims <- right_join(all_clean_sims, all_two_pi_pcss)
+
+# 5312 observations before removing missing information
+
+two_pi_pcss_sims <- two_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_1 = test_date_post_injury_1 - onset) %>% 
+  mutate(dys_btwn_onset_test_1 = as.numeric(dys_btwn_onset_test_1)) %>% 
+  select(c(1:3, 27, 28, 104, 4:26, 29:103))
+
+mean_2(two_pi_pcss_sims$dys_btwn_onset_test_1)
+
+# mean of -10 days from injury to first test 
+
+# filter days between injury and test 1 less than 0 and more than 30
+
+two_pi_pcss_sims <- two_pi_pcss_sims %>% 
+  filter(dys_btwn_onset_test_1 >= 0 & dys_btwn_onset_test_1 <= 30)
+
+# reduced to 346 observations 
+
+write.csv(two_pi_pcss_sims, "two_impact_tests_sims_merge.csv")
+
+```
+
+```{r, include=FALSE}
+three_pi_pcss_sims <- right_join(all_clean_sims, all_three_pi_pcss)
+
+# 2235 observations before removing missing information
+
+three_pi_pcss_sims <- three_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_1 = test_date_post_injury_1 - onset) %>% 
+  mutate(dys_btwn_onset_test_1 = as.numeric(dys_btwn_onset_test_1)) %>%  
+  select(c(1:3, 27, 28, 29, 144, 4:26, 30:143))
+
+mean_2(two_pi_pcss_sims$dys_btwn_onset_test_1)
+
+# mean of 4.8 days from injury to first test 
+
+# filter days between injury and test 1 less than 0 and more than 30
+
+three_pi_pcss_sims <- three_pi_pcss_sims %>% 
+  filter(dys_btwn_onset_test_1 >= 0 & dys_btwn_onset_test_1 <= 30)
+
+# reduced to 145 observations 
+
+write.csv(three_pi_pcss_sims, "three_impact_tests_sims_merge.csv")
+
+```
+
+```{r, include=FALSE}
+four_pi_pcss_sims <- right_join(all_clean_sims, all_four_pi_pcss)
+
+# 784 observations before removing missing information
+
+four_pi_pcss_sims <- four_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_1 = test_date_post_injury_1 - onset) %>% 
+  mutate(dys_btwn_onset_test_1 = as.numeric(dys_btwn_onset_test_1)) %>% 
+  select(c(1:3, 27, 28, 29, 30, 183, 4:26, 31:182))
+
+mean_2(four_pi_pcss_sims$dys_btwn_onset_test_1)
+
+# mean of -2 days from injury to first test 
+
+# filter days between injury and test 1 more than 0 and less than 30
+
+four_pi_pcss_sims <- four_pi_pcss_sims %>% 
+  filter(dys_btwn_onset_test_1 >= 0 & dys_btwn_onset_test_1 <= 30)
+
+# reduced to 41 observations 
+
+write.csv(four_pi_pcss_sims, "four_impact_tests_sims_merge.csv")
+
 ```
