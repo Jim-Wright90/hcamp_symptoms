@@ -124,6 +124,11 @@ all_leagues <- all_leagues %>%
                          `M` = "Male"),
          level = recode(level, 
                         `JV` = "Junior Varsity"))
+
+# 12.10 update: filter age in all leagues to 12 to 18
+
+all_leagues <- all_leagues %>% 
+  filter(age >= 12 & age <= 18)
   
 
 mean_2 <- function(x) {
@@ -283,6 +288,11 @@ impact <- impact %>%
          test_type != "Baseline ++")
 
 impact$test_type
+
+# 12.10 update: filter age range to 12-18
+
+impact <- impact %>% 
+  filter(age >= 12 & age <= 18)
 ```
 
 ```{r, include=FALSE}
@@ -2046,6 +2056,9 @@ all_four_pi_pcss %>%
 ```{r, include=FALSE}
 # output versions of pcss/impact data frames prior to joining with sims 
 
+
+
+
 write.csv(all_one_pi_pcss, "one_impact_pcss_test.csv")
 write.csv(all_two_pi_pcss, "two_impact_pcss_tests.csv")
 write.csv(all_three_pi_pcss, "three_impact_pcss_tests.csv")
@@ -2377,4 +2390,1786 @@ four_pi_pcss_sims <- four_pi_pcss_sims %>%
 
 write.csv(four_pi_pcss_sims, "four_impact_tests_sims_merge.csv")
 
+```
+
+## Data Exploration 
+
+Preliminary data exploration of all data sets extracted: 
+
+  1. One post-injury test (not merged with SIMS data)
+  2. Two post-injury tests (not merged with SIMS data)
+  3. Three post-injury tests (not merged with SIMS data)
+  4. Four post-injury tests (not merged with SIMS data)
+  5. One post-injury test (merged with SIMS)
+  6. Two post-injury tests (merged with SIMS)
+  7. Three post-injury tests (merged with SIMS)
+  8. Four post-injury tests (merged with SIMS)
+  
+Of note, age range for all data sets was filtered to individuals between 12 - 18 years old. 
+
+**Number of Observations per Data Set**
+
+| **Data Set** | **Number of Observations** | 
+| :----------- | :------------------------: |
+| One post-injury test (not merged with SIMS) | 9,9991 |
+| One post-injury test (merged with SIMS) | 257 |
+| Two post-injury tests (not merged with SIMS) | 5,295 |
+| Two post-injury tests (merged with SIMS) | 341 |
+| Three post-injury tests (not merged with SIMS) | 2,228 |
+| Three post-injury tests (merged with SIMS) | 143 |
+| Four post-injury tests (not merged with SIMS) | 780 |
+| Four post-injury tests (merged with SIMS) | 40 |
+
+
+**PCSS Score Description**
+
+| **Symptom Cluster** | **Number of Items** | **Total Possible Score** |
+| :------------------ | :------------------ | :----------------------: |
+| Headache-Migraine Cluster | 3             | 18                       |
+| Anxiety-Mood Cluster | 5                  | 30                       |
+| Cognitive Cluster | 4                     | 24                       |
+| Ocular-Motor Cluster | 1                  | 6                        |
+| Vestibular Cluster | 4                    | 24                       |
+| Sleep Cluster | 5                         | 30                       |
+| Total Symptom Score | 22                  | 132                      |
+
+  
+### One Post-Injury Test (not merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=FALSE}
+names(all_one_pi_pcss)
+
+all_one_pi_pcss %>% 
+  group_by(gender) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      gender = colDef(name = "Gender"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+
+gender_tbl <- function(df, x) {
+  df %>% 
+  group_by({{x}}) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      gender = colDef(name = "Gender"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+}
+
+```
+  
+```{r, include=TRUE}
+gender_tbl(all_one_pi_pcss, gender)
+```
+
+#### Age
+
+```{r, include=FALSE}
+age_tbl <- function(df, x) {
+  df %>% 
+  group_by({{x}}) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+}
+```
+
+```{r, include=TRUE}
+age_tbl(all_one_pi_pcss, age)
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score
+
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, total_symptom_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster
+
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster
+
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, cognitive_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster
+
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster
+
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, vestibular_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster
+
+```{r, include=TRUE}
+create_react(all_one_pi_pcss, sleep_cluster_score_post_injury_1)
+```
+
+
+### Two Post-Injury Tests (not merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=TRUE}
+gender_tbl(all_two_pi_pcss, gender)
+```
+
+#### Age Test 1
+```{r, include=TRUE}
+all_two_pi_pcss %>% 
+  group_by(age_post_injury_1) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_1 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 2
+```{r, include=TRUE}
+all_two_pi_pcss %>% 
+  group_by(age_post_injury_2) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_2 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score 1
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, total_symptom_score_post_injury_1)
+```
+
+##### Total Symptom Score 2
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, total_symptom_score_post_injury_2)
+```
+
+##### Headache-Migraine Cluster 1
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 2
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, headache_migraine_cluster_score_post_injury_2)
+```
+
+##### Anxiety-Mood Cluster 1
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster 2
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, anxiety_mood_cluster_score_post_injury_2)
+```
+
+##### Cognitive Symptom Cluster 1
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, cognitive_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster 2
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, cognitive_cluster_score_post_injury_2)
+```
+
+##### Ocular-Motor Cluster 1
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster 2
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, ocular_motor_cluster_score_post_injury_2)
+```
+
+##### Vestibular Cluster 1
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, vestibular_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster 2
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, vestibular_cluster_score_post_injury_2)
+```
+
+##### Sleep Cluster 1
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, sleep_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster 2
+
+```{r, include=TRUE}
+create_react(all_two_pi_pcss, sleep_cluster_score_post_injury_2)
+```
+
+### Three Post-Injury Tests (not merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=TRUE}
+gender_tbl(all_three_pi_pcss, gender)
+```
+
+#### Age Test 1
+```{r, include=TRUE}
+all_three_pi_pcss %>% 
+  group_by(age_post_injury_1) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_1 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 2
+```{r, include=TRUE}
+all_three_pi_pcss %>% 
+  group_by(age_post_injury_2) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_2 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 3
+```{r, include=TRUE}
+all_three_pi_pcss %>% 
+  group_by(age_post_injury_3) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_3 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score 1
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, total_symptom_score_post_injury_1)
+```
+
+##### Total Symptom Score 2
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, total_symptom_score_post_injury_2)
+```
+
+##### Total Symptom Score 3
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, total_symptom_score_post_injury_3)
+```
+
+##### Headache-Migraine Cluster 1
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 2
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, headache_migraine_cluster_score_post_injury_2)
+```
+
+##### Headache-Migraine Cluster 3
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, headache_migraine_cluster_score_post_injury_3)
+```
+
+##### Anxiety-Mood Cluster 1
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster 2
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, anxiety_mood_cluster_score_post_injury_2)
+```
+
+##### Anxiety-Mood Cluster 3
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, anxiety_mood_cluster_score_post_injury_3)
+```
+
+##### Cognitive Symptom Cluster 1
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, cognitive_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster 2
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, cognitive_cluster_score_post_injury_2)
+```
+
+##### Cognitive Symptom Cluster 3
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, cognitive_cluster_score_post_injury_3)
+```
+
+##### Ocular-Motor Cluster 1
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster 2
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, ocular_motor_cluster_score_post_injury_2)
+```
+
+##### Ocular-Motor Cluster 3
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, ocular_motor_cluster_score_post_injury_3)
+```
+
+##### Vestibular Cluster 1
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, vestibular_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster 2
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, vestibular_cluster_score_post_injury_2)
+```
+
+##### Vestibular Cluster 3
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, vestibular_cluster_score_post_injury_3)
+```
+
+##### Sleep Cluster 1
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, sleep_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster 2
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, sleep_cluster_score_post_injury_2)
+```
+
+##### Sleep Cluster 3
+
+```{r, include=TRUE}
+create_react(all_three_pi_pcss, sleep_cluster_score_post_injury_3)
+```
+
+
+### Four Post-Injury Tests (not merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=TRUE}
+gender_tbl(all_four_pi_pcss, gender)
+```
+
+#### Age Test 1
+```{r, include=TRUE}
+all_four_pi_pcss %>% 
+  group_by(age_post_injury_1) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_1 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 2
+```{r, include=TRUE}
+all_four_pi_pcss %>% 
+  group_by(age_post_injury_2) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_2 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 3
+```{r, include=TRUE}
+all_four_pi_pcss %>% 
+  group_by(age_post_injury_3) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_3 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 4
+```{r, include=TRUE}
+all_four_pi_pcss %>% 
+  group_by(age_post_injury_4) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_4 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score 1
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, total_symptom_score_post_injury_1)
+```
+
+##### Total Symptom Score 2
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, total_symptom_score_post_injury_2)
+```
+
+##### Total Symptom Score 3
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, total_symptom_score_post_injury_3)
+```
+
+##### Total Symptom Score 4
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, total_symptom_score_post_injury_4)
+```
+
+##### Headache-Migraine Cluster 1
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 2
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, headache_migraine_cluster_score_post_injury_2)
+```
+
+##### Headache-Migraine Cluster 3
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, headache_migraine_cluster_score_post_injury_3)
+```
+
+##### Headache-Migraine Cluster 4
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, headache_migraine_cluster_score_post_injury_4)
+```
+
+##### Anxiety-Mood Cluster 1
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster 2
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, anxiety_mood_cluster_score_post_injury_2)
+```
+
+##### Anxiety-Mood Cluster 3
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, anxiety_mood_cluster_score_post_injury_3)
+```
+
+##### Anxiety-Mood Cluster 4
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, anxiety_mood_cluster_score_post_injury_4)
+```
+
+##### Cognitive Symptom Cluster 1
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, cognitive_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster 2
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, cognitive_cluster_score_post_injury_2)
+```
+
+##### Cognitive Symptom Cluster 3
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, cognitive_cluster_score_post_injury_3)
+```
+
+##### Cognitive Symptom Cluster 4
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, cognitive_cluster_score_post_injury_4)
+```
+
+##### Ocular-Motor Cluster 1
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster 2
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, ocular_motor_cluster_score_post_injury_2)
+```
+
+##### Ocular-Motor Cluster 3
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, ocular_motor_cluster_score_post_injury_3)
+```
+
+##### Ocular-Motor Cluster 4
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, ocular_motor_cluster_score_post_injury_4)
+```
+
+##### Vestibular Cluster 1
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, vestibular_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster 2
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, vestibular_cluster_score_post_injury_2)
+```
+
+##### Vestibular Cluster 3
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, vestibular_cluster_score_post_injury_3)
+```
+
+##### Vestibular Cluster 4
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, vestibular_cluster_score_post_injury_4)
+```
+
+##### Sleep Cluster 1
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, sleep_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster 2
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, sleep_cluster_score_post_injury_2)
+```
+
+##### Sleep Cluster 3
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, sleep_cluster_score_post_injury_3)
+```
+
+##### Sleep Cluster 4
+
+```{r, include=TRUE}
+create_react(all_four_pi_pcss, sleep_cluster_score_post_injury_4)
+```
+
+
+### One Post-Injury Test (merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=FALSE}
+names(one_pi_pcss_sims)
+```
+  
+```{r, include=TRUE}
+gender_tbl(one_pi_pcss_sims, gender)
+```
+
+#### Age
+
+```{r, include=TRUE}
+age_tbl(one_pi_pcss_sims, age)
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score
+
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, total_symptom_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster
+
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster
+
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, cognitive_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster
+
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster
+
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, vestibular_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster
+
+```{r, include=TRUE}
+create_react(one_pi_pcss_sims, sleep_cluster_score_post_injury_1)
+```
+
+#### RTL/RTP Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Injury Onset to Test Date
+
+```{r, include=TRUE}
+create_react_time(one_pi_pcss_sims, dys_btwn_onset_test_1)
+```
+
+##### Injury Onset to RTL Completion
+
+```{r, include=TRUE}
+create_react_time(one_pi_pcss_sims, dys_btwn_onset_rtp_2)
+```
+
+##### Injury Onset to RTP Completion
+
+```{r, include=TRUE}
+create_react_time(one_pi_pcss_sims, dys_btwn_onset_rtp_7)
+```
+
+##### Plot 1
+
+```{r, include=FALSE}
+ggplot(one_pi_pcss_sims, aes(dys_btwn_onset_test_1, dys_btwn_onset_rtp_2)) +
+  geom_point() +
+  geom_smooth() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTL Completion")
+
+time_scatter <- function(df, x, y) {
+  ggplot(df, aes({{x}}, {{y}})) +
+  geom_point() +
+  geom_smooth() 
+}
+
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTL Completion")
+```
+
+```{r, include=TRUE}
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 2
+
+```{r, include=TRUE}
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 3
+
+```{r, include=TRUE}
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to RTL Completion",
+       y = "Onset to RTP Completion")
+```
+
+
+### Two Post-Injury Tests (merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=TRUE}
+gender_tbl(two_pi_pcss_sims, gender)
+```
+
+#### Age Test 1
+```{r, include=TRUE}
+two_pi_pcss_sims %>% 
+  group_by(age_post_injury_1) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_1 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 2
+```{r, include=TRUE}
+two_pi_pcss_sims %>% 
+  group_by(age_post_injury_2) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_2 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score 1
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, total_symptom_score_post_injury_1)
+```
+
+##### Total Symptom Score 2
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, total_symptom_score_post_injury_2)
+```
+
+##### Headache-Migraine Cluster 1
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 2
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, headache_migraine_cluster_score_post_injury_2)
+```
+
+##### Anxiety-Mood Cluster 1
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster 2
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_2)
+```
+
+##### Cognitive Symptom Cluster 1
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, cognitive_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster 2
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, cognitive_cluster_score_post_injury_2)
+```
+
+##### Ocular-Motor Cluster 1
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster 2
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, ocular_motor_cluster_score_post_injury_2)
+```
+
+##### Vestibular Cluster 1
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, vestibular_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster 2
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, vestibular_cluster_score_post_injury_2)
+```
+
+##### Sleep Cluster 1
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, sleep_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster 2
+
+```{r, include=TRUE}
+create_react(two_pi_pcss_sims, sleep_cluster_score_post_injury_2)
+```
+
+#### RTL/RTP Summary {.tabset .tabset-fade .tabset-pills}
+
+```{r, include=FALSE}
+# adding in additional time variables 
+two_pi_pcss_sims <- two_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_2 = test_date_post_injury_2 - onset) %>% 
+  mutate(dys_btwn_onset_test_2 = as.numeric(dys_btwn_onset_test_2))
+
+three_pi_pcss_sims <- three_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_2 = test_date_post_injury_2 - onset,
+         dys_btwn_onset_test_3 = test_date_post_injury_3 - onset) %>% 
+  mutate(dys_btwn_onset_test_2 = as.numeric(dys_btwn_onset_test_2),
+         dys_btwn_onset_test_3 = as.numeric(dys_btwn_onset_test_3))
+
+four_pi_pcss_sims <- four_pi_pcss_sims %>% 
+  mutate(dys_btwn_onset_test_2 = test_date_post_injury_2 - onset,
+         dys_btwn_onset_test_3 = test_date_post_injury_3 - onset,
+         dys_btwn_onset_test_4 = test_date_post_injury_4 - onset) %>% 
+  mutate(dys_btwn_onset_test_2 = as.numeric(dys_btwn_onset_test_2),
+         dys_btwn_onset_test_3 = as.numeric(dys_btwn_onset_test_3),
+         dys_btwn_onset_test_4 = as.numeric(dys_btwn_onset_test_4))
+
+```
+
+##### Injury Onset to Test Date 1
+
+```{r, include=TRUE}
+create_react_time(two_pi_pcss_sims, dys_btwn_onset_test_1)
+```
+
+##### Injury Onset to Test Date 2
+
+```{r, include=TRUE}
+create_react_time(two_pi_pcss_sims, dys_btwn_onset_test_2)
+```
+
+##### Injury Onset to RTL Completion
+
+```{r, include=TRUE}
+create_react_time(two_pi_pcss_sims, dys_btwn_onset_rtp_2)
+```
+
+##### Injury Onset to RTP Completion
+
+```{r, include=TRUE}
+create_react_time(two_pi_pcss_sims, dys_btwn_onset_rtp_7)
+```
+
+##### Plot 1
+
+
+```{r, include=TRUE}
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to Test 2 Date")
+```
+
+##### Plot 2
+
+```{r, include=TRUE}
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 3
+```{r, include=TRUE}
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 4
+
+```{r, include=TRUE}
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 5
+```{r, include=TRUE}
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to RTP Completion")
+```
+
+
+##### Plot 6
+```{r, include=TRUE}
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to RTL Completion",
+       y = "Onset to RTP Completion")
+```
+
+### Three Post-Injury Tests (merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=TRUE}
+gender_tbl(three_pi_pcss_sims, gender)
+```
+
+#### Age Test 1
+```{r, include=TRUE}
+three_pi_pcss_sims %>% 
+  group_by(age_post_injury_1) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_1 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 2
+```{r, include=TRUE}
+three_pi_pcss_sims %>% 
+  group_by(age_post_injury_2) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_2 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 3
+```{r, include=TRUE}
+three_pi_pcss_sims %>% 
+  group_by(age_post_injury_3) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_3 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score 1
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, total_symptom_score_post_injury_1)
+```
+
+##### Total Symptom Score 2
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, total_symptom_score_post_injury_2)
+```
+
+##### Total Symptom Score 3
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, total_symptom_score_post_injury_3)
+```
+
+##### Headache-Migraine Cluster 1
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 2
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, headache_migraine_cluster_score_post_injury_2)
+```
+
+##### Headache-Migraine Cluster 3
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, headache_migraine_cluster_score_post_injury_3)
+```
+
+
+##### Anxiety-Mood Cluster 1
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster 2
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_2)
+```
+
+##### Anxiety-Mood Cluster 3
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_3)
+```
+
+##### Cognitive Symptom Cluster 1
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, cognitive_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster 2
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, cognitive_cluster_score_post_injury_2)
+```
+
+##### Cognitive Symptom Cluster 3
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, cognitive_cluster_score_post_injury_3)
+```
+
+##### Ocular-Motor Cluster 1
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster 2
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, ocular_motor_cluster_score_post_injury_2)
+```
+
+##### Ocular-Motor Cluster 3
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, ocular_motor_cluster_score_post_injury_3)
+```
+
+##### Vestibular Cluster 1
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, vestibular_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster 2
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, vestibular_cluster_score_post_injury_2)
+```
+
+##### Vestibular Cluster 3
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, vestibular_cluster_score_post_injury_3)
+```
+
+##### Sleep Cluster 1
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, sleep_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster 2
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, sleep_cluster_score_post_injury_2)
+```
+
+##### Sleep Cluster 3
+
+```{r, include=TRUE}
+create_react(three_pi_pcss_sims, sleep_cluster_score_post_injury_3)
+```
+
+#### RTL/RTP Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Injury Onset to Test Date 1
+
+```{r, include=TRUE}
+create_react_time(three_pi_pcss_sims, dys_btwn_onset_test_1)
+```
+
+##### Injury Onset to Test Date 2
+
+```{r, include=TRUE}
+create_react_time(three_pi_pcss_sims, dys_btwn_onset_test_2)
+```
+
+##### Injury Onset to Test Date 3
+
+```{r, include=TRUE}
+create_react_time(three_pi_pcss_sims, dys_btwn_onset_test_3)
+```
+
+##### Injury Onset to RTL Completion
+
+```{r, include=TRUE}
+create_react_time(three_pi_pcss_sims, dys_btwn_onset_rtp_2)
+```
+
+##### Injury Onset to RTP Completion
+
+```{r, include=TRUE}
+create_react_time(three_pi_pcss_sims, dys_btwn_onset_rtp_7)
+```
+
+##### Plot 1
+
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to Test 2 Date")
+```
+
+##### Plot 2
+
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_3) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to Test 3 Date")
+```
+
+##### Plot 3
+
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_test_3) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to Test 3 Date")
+```
+
+##### Plot 4
+
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 5
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 6
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 3 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 7
+
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 8
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 9
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 3 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 10
+```{r, include=TRUE}
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to RTL Completion",
+       y = "Onset to RTP Completion")
+```
+
+
+### Four Post-Injury Tests (merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
+
+#### Gender
+
+```{r, include=TRUE}
+gender_tbl(four_pi_pcss_sims, gender)
+```
+
+#### Age Test 1
+```{r, include=TRUE}
+four_pi_pcss_sims %>% 
+  group_by(age_post_injury_1) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_1 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 2
+```{r, include=TRUE}
+four_pi_pcss_sims %>% 
+  group_by(age_post_injury_2) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_2 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 3
+```{r, include=TRUE}
+four_pi_pcss_sims %>% 
+  group_by(age_post_injury_3) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_3 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### Age Test 4
+```{r, include=TRUE}
+four_pi_pcss_sims %>% 
+  group_by(age_post_injury_4) %>% 
+  summarize(total = n()) %>% 
+  reactable(
+    columns = list(
+      age_post_injury_4 = colDef(name = "Age"),
+      total = colDef(name = "Total",
+                     format = colFormat(separators = TRUE))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+```
+
+#### PCSS Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Total Symptom Score 1
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, total_symptom_score_post_injury_1)
+```
+
+##### Total Symptom Score 2
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, total_symptom_score_post_injury_2)
+```
+
+##### Total Symptom Score 3
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, total_symptom_score_post_injury_3)
+```
+
+##### Total Symptom Score 4
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, total_symptom_score_post_injury_4)
+```
+
+##### Headache-Migraine Cluster 1
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+##### Headache-Migraine Cluster 2
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, headache_migraine_cluster_score_post_injury_2)
+```
+
+##### Headache-Migraine Cluster 3
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, headache_migraine_cluster_score_post_injury_3)
+```
+
+##### Headache-Migraine Cluster 4
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, headache_migraine_cluster_score_post_injury_4)
+```
+
+##### Anxiety-Mood Cluster 1
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+##### Anxiety-Mood Cluster 2
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_2)
+```
+
+##### Anxiety-Mood Cluster 3
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_3)
+```
+
+##### Anxiety-Mood Cluster 4
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, anxiety_mood_cluster_score_post_injury_4)
+```
+
+##### Cognitive Symptom Cluster 1
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, cognitive_cluster_score_post_injury_1)
+```
+
+##### Cognitive Symptom Cluster 2
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, cognitive_cluster_score_post_injury_2)
+```
+
+##### Cognitive Symptom Cluster 3
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, cognitive_cluster_score_post_injury_3)
+```
+
+##### Cognitive Symptom Cluster 4
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, cognitive_cluster_score_post_injury_4)
+```
+
+##### Ocular-Motor Cluster 1
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+##### Ocular-Motor Cluster 2
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, ocular_motor_cluster_score_post_injury_2)
+```
+
+##### Ocular-Motor Cluster 3
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, ocular_motor_cluster_score_post_injury_3)
+```
+
+##### Ocular-Motor Cluster 4
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, ocular_motor_cluster_score_post_injury_4)
+```
+
+##### Vestibular Cluster 1
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, vestibular_cluster_score_post_injury_1)
+```
+
+##### Vestibular Cluster 2
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, vestibular_cluster_score_post_injury_2)
+```
+
+##### Vestibular Cluster 3
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, vestibular_cluster_score_post_injury_3)
+```
+
+##### Vestibular Cluster 4
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, vestibular_cluster_score_post_injury_4)
+```
+
+##### Sleep Cluster 1
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, sleep_cluster_score_post_injury_1)
+```
+
+##### Sleep Cluster 2
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, sleep_cluster_score_post_injury_2)
+```
+
+##### Sleep Cluster 3
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, sleep_cluster_score_post_injury_3)
+```
+
+##### Sleep Cluster 4
+
+```{r, include=TRUE}
+create_react(four_pi_pcss_sims, sleep_cluster_score_post_injury_4)
+```
+
+
+#### RTL/RTP Summary {.tabset .tabset-fade .tabset-pills}
+
+##### Injury Onset to Test Date 1
+
+```{r, include=TRUE}
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_test_1)
+```
+
+##### Injury Onset to Test Date 2
+
+```{r, include=TRUE}
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_test_2)
+```
+
+##### Injury Onset to Test Date 3
+
+```{r, include=TRUE}
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_test_3)
+```
+
+##### Injury Onset to Test Date 4
+
+```{r, include=TRUE}
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_test_4)
+```
+
+##### Injury Onset to RTL Completion
+
+```{r, include=TRUE}
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_rtp_2)
+```
+
+##### Injury Onset to RTP Completion
+
+```{r, include=TRUE}
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_rtp_7)
+```
+
+##### Plot 1
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to Test 2 Date")
+```
+
+##### Plot 2
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_3) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to Test 3 Date")
+```
+
+##### Plot 3
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_4) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to Test 4 Date")
+```
+
+##### Plot 4
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_test_3) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to Test 3 Date")
+```
+
+##### Plot 5
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_test_4) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to Test 4 Date")
+```
+
+##### Plot 6
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_test_4) +
+  labs(x = "Onset to Test 3 Date",
+       y = "Onset to Test 4 Date")
+```
+
+##### Plot 7
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 8
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 9
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 3 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 10
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_4, dys_btwn_onset_rtp_2) +
+  labs(x = "Onset to Test 4 Date",
+       y = "Onset to RTL Completion")
+```
+
+##### Plot 11
+
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 1 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 12
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 2 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 13
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 3 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 14
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_4, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to Test 4 Date",
+       y = "Onset to RTP Completion")
+```
+
+##### Plot 15
+```{r, include=TRUE}
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+  labs(x = "Onset to RTL Completion",
+       y = "Onset to RTP Completion")
 ```
