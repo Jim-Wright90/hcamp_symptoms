@@ -2411,7 +2411,7 @@ Of note, age range for all data sets was filtered to individuals between 12 - 18
 
 | **Data Set** | **Number of Observations** | 
 | :----------- | :------------------------: |
-| One post-injury test (not merged with SIMS) | 9,9991 |
+| One post-injury test (not merged with SIMS) | 9,991 |
 | One post-injury test (merged with SIMS) | 257 |
 | Two post-injury tests (not merged with SIMS) | 5,295 |
 | Two post-injury tests (merged with SIMS) | 341 |
