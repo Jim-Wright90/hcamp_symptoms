@@ -3123,6 +3123,57 @@ create_react(all_four_pi_pcss, sleep_cluster_score_post_injury_4)
 ```
 
 
+### Non-merged Data Summary 
+
+Overall, average symptom severity decreases with consecutive testing. 
+
+**Two post-injury tests**
+
+5,295 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** |
+| :-------------------| :-------------: | :-----------: | :-------------: | :-----------: |
+| Headache-Migraine Cluster | 3.02      | 3.4           | 0.94            | 1.89          |
+| Anxiety-Mood Cluster      | 1.91      | 3.68          | 0.56            | 1.88          |
+| Cognitive Cluster         | 2.98      | 4.23          | 0.95            | 2.37          |
+| Ocular-Motor Cluster      | 0.36      | 0.92          | 0.1             | 0.44          |
+| Vestibular Cluster        | 2.01      | 3.1           | 0.45            | 1.37          |
+| Sleep Cluster             | 3.02      | 4.16          | 0.94            | 2.23          |
+| Total Symptom Score       | 13.31     | 16.76         | 3.94            | 8.62          |
+
+
+**Three post-injury tests**
+
+2,228 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** | **Mean Test 3** | **SD Test 3** | 
+| :-------------------| :-------------: | :-----------: | :-------------: | :-----------: | :-----------: | :-----------: | 
+| Headache-Migraine Cluster | 3.55   | 3.6        | 1.34         | 2.23       | 0.57 | 1.45 |
+| Anxiety-Mood Cluster      | 2.32   | 3.99       | 0.76         | 2.17       | 0.39 | 1.62 |
+| Cognitive Cluster         | 3.68   | 4.67       | 1.39         | 2.86       | 0.63 | 1.98 |
+| Ocular-Motor Cluster      | 0.45   | 1          | 0.13         | 0.5        | 0.06 | 0.33 |
+| Vestibular Cluster        | 2.48   | 3.39       | 0.68         | 1.66       | 0.26 | 1.06 |
+| Sleep Cluster             | 3.62   | 4.47       | 1.37         | 2.69       | 0.59 | 1.79 |
+| Total Symptom Score       | 16.09  | 18.1       | 5.68         | 10.28      | 2.49 | 6.96 | 
+
+
+**Four post-injury tests**
+
+780 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** | **Mean Test 3** | **SD Test 3** | **Mean Test 4** | **SD Test 4** |
+| :-------------------| :-------------: | :-----------: | :-------------: | :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
+| Headache-Migraine Cluster | 4.04  | 3.66  | 1.83 | 2.54  | 0.99 | 1.91 | 0.6  | 1.66 |
+| Anxiety-Mood Cluster      | 2.7   | 4.3   | 1.07 | 2.64  | 0.63 | 2.04 | 0.43 | 1.99 |
+| Cognitive Cluster         | 4.31  | 5.02  | 2.08 | 3.5   | 1.12 | 2.65 | 0.68 | 2.37 |
+| Ocular-Motor Cluster      | 0.56  | 1.15  | 0.18 | 0.58  | 0.09 | 0.41 | 0.07 | 0.41 |
+| Vestibular Cluster        | 3.06  | 3.72  | 1.03 | 2.11  | 0.48 | 1.52 | 0.29 | 1.36 |
+| Sleep Cluster             | 4.28  | 4.85  | 1.98 | 3.25  | 0.98 | 2.35 | 0.54 | 1.87 |
+| Total Symptom Score       | 18.95 | 19.51 | 8.17 | 12.36 | 4.28 | 9.27 | 2.62 | 8.6  |
+
+
+
+
 ### One Post-Injury Test (merged with SIMS data) {.tabset .tabset-fade .tabset-pills}
 
 #### Gender
@@ -4173,3 +4224,59 @@ time_scatter(four_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
   labs(x = "Onset to RTL Completion",
        y = "Onset to RTP Completion")
 ```
+
+
+### Merged Data Summary 
+
+Overall, the average duration of time from injury onset to RTL completion (RTP step 2) was shorter than the average duration of time from injury onset to post-injury test 1. 
+
+
+**One post-injury test**
+
+257 concussion injuries 
+
+| **Benchmark** | **Mean** | **SD** | 
+| :------------ | :------: | :----: |
+| Onset to Test 1 | 5.21 days | 4.91 days |
+| Onset to RTL completion | 3.84 days | 4.09 days |
+| Onset to RTP completion | 20.99 days | 11.6 days |
+
+**Two post-injury tests**
+
+341 concussion injuries 
+
+| **Benchmark** | **Mean** | **SD** | 
+| :------------ | :------: | :----: |
+| Onset to Test 1 | 4.91 days | 4.68 days |
+| Onset to Test 2 | 9.72 days | 5.89 days |
+| Onset to RTL completion | 3.87 days | 4.16 days |
+| Onset to RTP completion | 21.23 days | 10.12 days |
+
+**Three post-injury tests**
+
+143 concussion injuries 
+
+| **Benchmark** | **Mean** | **SD** | 
+| :------------ | :------: | :----: |
+| Onset to Test 1 | 5.18 days | 5.03 days |
+| Onset to Test 2 | 9.78 days | 5.61 days |
+| Onset to Test 3 | 14.59 days | 6.97 days |
+| Onset to RTL completion | 3.86 days | 4.02 days |
+| Onset to RTP completion | 25.02 days | 10.97 days |
+
+
+**Four post-injury tests**
+
+40 concussion injuries 
+
+
+| **Benchmark** | **Mean** | **SD** | 
+| :------------ | :------: | :----: |
+| Onset to Test 1 | 6.5 days   | 6.3 days  |
+| Onset to Test 2 | 12.57 days | 6.52 days |
+| Onset to Test 3 | 17.4 days | 7.52 days |
+| Onset to Test 4 | 23.82 days | 9.55 days |
+| Onset to RTL completion | 5.05 days | 5.25 days |
+| Onset to RTP completion | 33.9 days | 11.82 days |
+
+
