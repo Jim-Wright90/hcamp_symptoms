@@ -3125,7 +3125,22 @@ create_react(all_four_pi_pcss, sleep_cluster_score_post_injury_4)
 
 ### Non-merged Data Summary 
 
-Overall, average symptom severity decreases with consecutive testing. 
+Overall, average symptom severity decreases with consecutive testing. Also, the average symptom severity score is lower for individuals who complete one post-injury test that individuals who complete multiple post-injury tests, suggesting symptom severity on the first post-injury test is predictive of requiring multiple post-injury tests.
+
+**One post-injury test**
+
+9,991 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** |
+| :------------------ | :-------------: | :-----------: |
+| Headache-Migraine Cluster | 2.45      | 3.2           | 
+| Anxiety-Mood Cluster      | 1.57      | 3.39          |
+| Cognitive Cluster         | 2.36      | 3.9           |
+| Ocular-Motor Cluster      | 0.29      | 0.82          |
+| Vestibular Cluster        | 1.57      | 2.82          |
+| Sleep Cluster             | 2.45      | 3.85          |
+| Total Symptom Score       | 10.7      | 15.57         |
+
 
 **Two post-injury tests**
 
@@ -4280,3 +4295,64 @@ Overall, the average duration of time from injury onset to RTL completion (RTP s
 | Onset to RTP completion | 33.9 days | 11.82 days |
 
 
+Similar to the non-merged data, average total symptom severity scores decrease with consecutive testing. Additionally, the average symptom severity scores on test 1 are higher for individuals who complete multiple post-injury tests. 
+
+
+**One post-injury test**
+
+257 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** |
+| :------------------ | :-------------: | :-----------: |
+| Headache-Migraine Cluster | 2.63      | 3.42           | 
+| Anxiety-Mood Cluster      | 1.81      | 3.55          |
+| Cognitive Cluster         | 2.58      | 4.2           |
+| Ocular-Motor Cluster      | 0.35      | 0.94          |
+| Vestibular Cluster        | 1.72      | 3.01          |
+| Sleep Cluster             | 2.72      | 4.03          |
+| Total Symptom Score       | 11.81      | 16.96         |
+
+
+**Two post-injury tests**
+
+341 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** |
+| :-------------------| :-------------: | :-----------: | :-------------: | :-----------: |
+| Headache-Migraine Cluster | 2.81      | 3.29           | 0.74            | 1.61          |
+| Anxiety-Mood Cluster      | 1.78      | 3.33          | 0.34            | 1.18          |
+| Cognitive Cluster         | 2.86      | 4.13          | 0.76            | 1.95          |
+| Ocular-Motor Cluster      | 0.32      | 0.9          | 0.08             | 0.35          |
+| Vestibular Cluster        | 1.8      | 2.94           | 0.31            | 1.01          |
+| Sleep Cluster             | 2.56      | 3.7          | 0.7            | 1.82          |
+| Total Symptom Score       | 12.14     | 15.96         | 2.93            | 6.63          |
+
+
+**Three post-injury tests**
+
+143 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** | **Mean Test 3** | **SD Test 3** | 
+| :-------------------| :-------------: | :-----------: | :-------------: | :-----------: | :-----------: | :-----------: | 
+| Headache-Migraine Cluster | 3.15   | 3.65        | 1.25         | 2.17       | 0.45 | 0.98 |
+| Anxiety-Mood Cluster      | 2.13   | 3.53       | 0.45         | 1.24       | 0.17 | 0.72 |
+| Cognitive Cluster         | 3.42   | 4.66       | 1.25         | 2.62       | 0.38 | 1.01 |
+| Ocular-Motor Cluster      | 0.42   | 1.02          | 0.12         | 0.44        | 0.01 | 0.12 |
+| Vestibular Cluster        | 2.19   | 3.41       | 0.52         | 1.27       | 0.09 | 0.35 |
+| Sleep Cluster             | 2.99   | 4.2       | 1.17         | 2.47       | 0.25 | 0.64 |
+| Total Symptom Score       | 14.31  | 17.98       | 4.76         | 8.73      | 1.36 | 2.54 | 
+
+
+**Four post-injury tests**
+
+40 concussion injuries 
+
+| **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** | **Mean Test 3** | **SD Test 3** | **Mean Test 4** | **SD Test 4** |
+| :-------------------| :-------------: | :-----------: | :-------------: | :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
+| Headache-Migraine Cluster | 3.85  | 4.04  | 1.48 | 2.35  | 0.88 | 1.45 | 0.4  | 1.37 |
+| Anxiety-Mood Cluster      | 2.83  | 3.75  | 0.55 | 1.3   | 0.22 | 0.58 | 0.03 | 0.16 |
+| Cognitive Cluster         | 4.12  | 5.45  | 1.45 | 2.66  | 0.6  | 1.32 | 0.4  | 1.92 |
+| Ocular-Motor Cluster      | 0.65  | 1.44  | 0.07 | 0.35  | 0    | 0    | 0    | 0    |
+| Vestibular Cluster        | 2.83  | 4.28  | 0.7  | 1.59  | 0.1  | 0.38 | 0.12 | 0.65 |
+| Sleep Cluster             | 4.18  | 5.42  | 1.85 | 3.55  | 0.38 | 0.84 | 0.17 | 0.59 |
+| Total Symptom Score       | 18.45 | 21.52 | 6.1  | 10.32 | 2.17 | 3.1  | 1.12 | 4.3  |
