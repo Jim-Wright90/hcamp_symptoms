@@ -2079,22 +2079,22 @@ head(all_leagues)
 all_leagues <- all_leagues %>% 
   filter(injury == "Head Concussion") %>% 
   mutate(dys_btwn_onset_rtp_7 = rtp_protocol_7 - onset,
-         dys_btwn_onset_rtp_2 = rtp_protocol_2_return_to_school_full_time - onset,
-         dys_btwn_rtp_2_rtp_7 = rtp_protocol_7 - rtp_protocol_2_return_to_school_full_time) %>% 
+         dys_btwn_onset_rtp_3 = rtp_protocol_3_light_exercise - onset,
+         dys_btwn_rtp_3_rtp_7 = rtp_protocol_7 - rtp_protocol_3_light_exercise) %>% 
   mutate(dys_btwn_onset_rtp_7 = as.numeric(dys_btwn_onset_rtp_7),
-         dys_btwn_onset_rtp_2 = as.numeric(dys_btwn_onset_rtp_2),
-         dys_btwn_rtp_2_rtp_7 = as.numeric(dys_btwn_rtp_2_rtp_7))
+         dys_btwn_onset_rtp_3 = as.numeric(dys_btwn_onset_rtp_3),
+         dys_btwn_rtp_3_rtp_7 = as.numeric(dys_btwn_rtp_3_rtp_7))
 
 mean_2(all_leagues$dys_btwn_onset_rtp_7)
-mean_2(all_leagues$dys_btwn_onset_rtp_2)
-mean_2(all_leagues$dys_btwn_rtp_2_rtp_7)
+mean_2(all_leagues$dys_btwn_onset_rtp_3)
+mean_2(all_leagues$dys_btwn_rtp_3_rtp_7)
 
 # filter age range for date ranges 
 
 all_leagues <- all_leagues %>% 
   filter(dys_btwn_onset_rtp_7 >= 0 & dys_btwn_onset_rtp_7 <= 100,
-         dys_btwn_onset_rtp_2 >= 0 & dys_btwn_onset_rtp_2 <= 30,
-         dys_btwn_rtp_2_rtp_7 >= 0 & dys_btwn_rtp_2_rtp_7 <= 70)
+         dys_btwn_onset_rtp_3 >= 0 & dys_btwn_onset_rtp_3 <= 30,
+         dys_btwn_rtp_3_rtp_7 >= 0 & dys_btwn_rtp_3_rtp_7 <= 70)
 
 ```
 
@@ -2231,15 +2231,15 @@ sims_rtp_7a <- sims_wide(all_leagues, student_id, onset,
 sims_onset_rtp_7 <- sims_wide(all_leagues, student_id, onset, 
                               dys_btwn_onset_rtp_7)
 
-# days between onset and step 2
+# days between onset and step 3
 
-sims_onset_rtp_2 <- sims_wide(all_leagues, student_id, onset, 
-                              dys_btwn_onset_rtp_2)
+sims_onset_rtp_3 <- sims_wide(all_leagues, student_id, onset, 
+                              dys_btwn_onset_rtp_3)
 
 # days between rtp 2 and 7 
 
-sims_rtp_2_7 <- sims_wide(all_leagues, student_id, onset, 
-                              dys_btwn_rtp_2_rtp_7)
+sims_rtp_3_7 <- sims_wide(all_leagues, student_id, onset, 
+                              dys_btwn_rtp_3_rtp_7)
 
 
 ```
@@ -2266,8 +2266,8 @@ sims_j16 <- left_join(sims_j15, sims_rtp_5)
 sims_j17 <- left_join(sims_j16, sims_rtp_6)
 sims_j18 <- left_join(sims_j17, sims_rtp_7a)
 sims_j19 <- left_join(sims_j18, sims_onset_rtp_7)
-sims_j20 <- left_join(sims_j19, sims_onset_rtp_2)
-all_clean_sims <- left_join(sims_j20, sims_rtp_2_7)
+sims_j20 <- left_join(sims_j19, sims_onset_rtp_3)
+all_clean_sims <- left_join(sims_j20, sims_rtp_3_7)
 
 all_clean_sims <- all_clean_sims %>% 
   mutate(last_name = str_to_title(last_name),
@@ -2412,13 +2412,13 @@ Of note, age range for all data sets was filtered to individuals between 12 - 18
 | **Data Set** | **Number of Observations** | 
 | :----------- | :------------------------: |
 | One post-injury test (not merged with SIMS) | 9,991 |
-| One post-injury test (merged with SIMS) | 257 |
+| One post-injury test (merged with SIMS) | 254 |
 | Two post-injury tests (not merged with SIMS) | 5,295 |
-| Two post-injury tests (merged with SIMS) | 341 |
+| Two post-injury tests (merged with SIMS) | 336 |
 | Three post-injury tests (not merged with SIMS) | 2,228 |
-| Three post-injury tests (merged with SIMS) | 143 |
+| Three post-injury tests (merged with SIMS) | 133 |
 | Four post-injury tests (not merged with SIMS) | 780 |
-| Four post-injury tests (merged with SIMS) | 40 |
+| Four post-injury tests (merged with SIMS) | 32 |
 
 
 **PCSS Score Description**
@@ -3261,7 +3261,7 @@ create_react_time(one_pi_pcss_sims, dys_btwn_onset_test_1)
 ##### Injury Onset to RTL Completion
 
 ```{r, include=TRUE}
-create_react_time(one_pi_pcss_sims, dys_btwn_onset_rtp_2)
+create_react_time(one_pi_pcss_sims, dys_btwn_onset_rtp_3)
 ```
 
 ##### Injury Onset to RTP Completion
@@ -3273,7 +3273,7 @@ create_react_time(one_pi_pcss_sims, dys_btwn_onset_rtp_7)
 ##### Plot 1
 
 ```{r, include=FALSE}
-ggplot(one_pi_pcss_sims, aes(dys_btwn_onset_test_1, dys_btwn_onset_rtp_2)) +
+ggplot(one_pi_pcss_sims, aes(dys_btwn_onset_test_1, dys_btwn_onset_rtp_3)) +
   geom_point() +
   geom_smooth() +
   theme(plot.title = element_text(hjust = 0.5)) +
@@ -3286,13 +3286,13 @@ time_scatter <- function(df, x, y) {
   geom_smooth() 
 }
 
-time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 1 Date",
        y = "Onset to RTL Completion")
 ```
 
 ```{r, include=TRUE}
-time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 1 Date",
        y = "Onset to RTL Completion")
 ```
@@ -3308,7 +3308,7 @@ time_scatter(one_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_7) +
 ##### Plot 3
 
 ```{r, include=TRUE}
-time_scatter(one_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+time_scatter(one_pi_pcss_sims, dys_btwn_onset_rtp_3, dys_btwn_onset_rtp_7) +
   labs(x = "Onset to RTL Completion",
        y = "Onset to RTP Completion")
 ```
@@ -3483,7 +3483,7 @@ create_react_time(two_pi_pcss_sims, dys_btwn_onset_test_2)
 ##### Injury Onset to RTL Completion
 
 ```{r, include=TRUE}
-create_react_time(two_pi_pcss_sims, dys_btwn_onset_rtp_2)
+create_react_time(two_pi_pcss_sims, dys_btwn_onset_rtp_3)
 ```
 
 ##### Injury Onset to RTP Completion
@@ -3504,14 +3504,14 @@ time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_test_2) +
 ##### Plot 2
 
 ```{r, include=TRUE}
-time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 1 Date",
        y = "Onset to RTL Completion")
 ```
 
 ##### Plot 3
 ```{r, include=TRUE}
-time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_2) +
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 2 Date",
        y = "Onset to RTL Completion")
 ```
@@ -3534,7 +3534,7 @@ time_scatter(two_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_7) +
 
 ##### Plot 6
 ```{r, include=TRUE}
-time_scatter(two_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+time_scatter(two_pi_pcss_sims, dys_btwn_onset_rtp_3, dys_btwn_onset_rtp_7) +
   labs(x = "Onset to RTL Completion",
        y = "Onset to RTP Completion")
 ```
@@ -3753,7 +3753,7 @@ create_react_time(three_pi_pcss_sims, dys_btwn_onset_test_3)
 ##### Injury Onset to RTL Completion
 
 ```{r, include=TRUE}
-create_react_time(three_pi_pcss_sims, dys_btwn_onset_rtp_2)
+create_react_time(three_pi_pcss_sims, dys_btwn_onset_rtp_3)
 ```
 
 ##### Injury Onset to RTP Completion
@@ -3789,21 +3789,21 @@ time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_test_3) +
 ##### Plot 4
 
 ```{r, include=TRUE}
-time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 1 Date",
        y = "Onset to RTL Completion")
 ```
 
 ##### Plot 5
 ```{r, include=TRUE}
-time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_2) +
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 2 Date",
        y = "Onset to RTL Completion")
 ```
 
 ##### Plot 6
 ```{r, include=TRUE}
-time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_2) +
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 3 Date",
        y = "Onset to RTL Completion")
 ```
@@ -3832,7 +3832,7 @@ time_scatter(three_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_7) +
 
 ##### Plot 10
 ```{r, include=TRUE}
-time_scatter(three_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+time_scatter(three_pi_pcss_sims, dys_btwn_onset_rtp_3, dys_btwn_onset_rtp_7) +
   labs(x = "Onset to RTL Completion",
        y = "Onset to RTP Completion")
 ```
@@ -4118,7 +4118,7 @@ create_react_time(four_pi_pcss_sims, dys_btwn_onset_test_4)
 ##### Injury Onset to RTL Completion
 
 ```{r, include=TRUE}
-create_react_time(four_pi_pcss_sims, dys_btwn_onset_rtp_2)
+create_react_time(four_pi_pcss_sims, dys_btwn_onset_rtp_3)
 ```
 
 ##### Injury Onset to RTP Completion
@@ -4178,28 +4178,28 @@ time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_test_4) +
 ##### Plot 7
 
 ```{r, include=TRUE}
-time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_2) +
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_1, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 1 Date",
        y = "Onset to RTL Completion")
 ```
 
 ##### Plot 8
 ```{r, include=TRUE}
-time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_2) +
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_2, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 2 Date",
        y = "Onset to RTL Completion")
 ```
 
 ##### Plot 9
 ```{r, include=TRUE}
-time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_2) +
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_3, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 3 Date",
        y = "Onset to RTL Completion")
 ```
 
 ##### Plot 10
 ```{r, include=TRUE}
-time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_4, dys_btwn_onset_rtp_2) +
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_4, dys_btwn_onset_rtp_3) +
   labs(x = "Onset to Test 4 Date",
        y = "Onset to RTL Completion")
 ```
@@ -4235,7 +4235,7 @@ time_scatter(four_pi_pcss_sims, dys_btwn_onset_test_4, dys_btwn_onset_rtp_7) +
 
 ##### Plot 15
 ```{r, include=TRUE}
-time_scatter(four_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
+time_scatter(four_pi_pcss_sims, dys_btwn_onset_rtp_3, dys_btwn_onset_rtp_7) +
   labs(x = "Onset to RTL Completion",
        y = "Onset to RTP Completion")
 ```
@@ -4243,56 +4243,54 @@ time_scatter(four_pi_pcss_sims, dys_btwn_onset_rtp_2, dys_btwn_onset_rtp_7) +
 
 ### Merged Data Summary 
 
-Overall, the average duration of time from injury onset to RTL completion (RTP step 2) was shorter than the average duration of time from injury onset to post-injury test 1. 
-
 
 **One post-injury test**
 
-257 concussion injuries 
+254 concussion injuries 
 
 | **Benchmark** | **Mean** | **SD** | 
 | :------------ | :------: | :----: |
-| Onset to Test 1 | 5.21 days | 4.91 days |
-| Onset to RTL completion | 3.84 days | 4.09 days |
-| Onset to RTP completion | 20.99 days | 11.6 days |
+| Onset to Test 1 | 4.96 days | 4.65 days |
+| Onset to RTL completion | 11.26 days | 6.05 days |
+| Onset to RTP completion | 18.78 days | 8.25 days |
 
 **Two post-injury tests**
 
-341 concussion injuries 
+336 concussion injuries 
 
 | **Benchmark** | **Mean** | **SD** | 
 | :------------ | :------: | :----: |
-| Onset to Test 1 | 4.91 days | 4.68 days |
-| Onset to Test 2 | 9.72 days | 5.89 days |
-| Onset to RTL completion | 3.87 days | 4.16 days |
-| Onset to RTP completion | 21.23 days | 10.12 days |
+| Onset to Test 1 | 4.71 days | 4.57 days |
+| Onset to Test 2 | 9.29 days | 5.39 days |
+| Onset to RTL completion | 12.24 days | 6.22 days |
+| Onset to RTP completion | 19.87 days | 8.12 days |
 
 **Three post-injury tests**
 
-143 concussion injuries 
+133 concussion injuries 
 
 | **Benchmark** | **Mean** | **SD** | 
 | :------------ | :------: | :----: |
-| Onset to Test 1 | 5.18 days | 5.03 days |
-| Onset to Test 2 | 9.78 days | 5.61 days |
-| Onset to Test 3 | 14.59 days | 6.97 days |
-| Onset to RTL completion | 3.86 days | 4.02 days |
-| Onset to RTP completion | 25.02 days | 10.97 days |
+| Onset to Test 1 | 4.62 days | 4.43 days |
+| Onset to Test 2 | 8.88 days | 4.84 days |
+| Onset to Test 3 | 13.54 days | 5.88 days |
+| Onset to RTL completion | 14.26 days | 6.66 days |
+| Onset to RTP completion | 22.89 days | 8.57 days |
 
 
 **Four post-injury tests**
 
-40 concussion injuries 
+32 concussion injuries 
 
 
 | **Benchmark** | **Mean** | **SD** | 
 | :------------ | :------: | :----: |
-| Onset to Test 1 | 6.5 days   | 6.3 days  |
-| Onset to Test 2 | 12.57 days | 6.52 days |
-| Onset to Test 3 | 17.4 days | 7.52 days |
-| Onset to Test 4 | 23.82 days | 9.55 days |
-| Onset to RTL completion | 5.05 days | 5.25 days |
-| Onset to RTP completion | 33.9 days | 11.82 days |
+| Onset to Test 1 | 4.47 days   | 4.63 days  |
+| Onset to Test 2 | 9.97 days | 5.08 days |
+| Onset to Test 3 | 14.69 days | 5.95 days |
+| Onset to Test 4 | 21.31 days | 8.29 days |
+| Onset to RTL completion | 18.66 days | 6.55 days |
+| Onset to RTP completion | 30.03 days | 8.69 days |
 
 
 Similar to the non-merged data, average total symptom severity scores decrease with consecutive testing. Additionally, the average symptom severity scores on test 1 are higher for individuals who complete multiple post-injury tests. 
@@ -4300,59 +4298,59 @@ Similar to the non-merged data, average total symptom severity scores decrease w
 
 **One post-injury test**
 
-257 concussion injuries 
+254 concussion injuries 
 
 | **Symptom Cluster** | **Mean Test 1** | **SD Test 1** |
 | :------------------ | :-------------: | :-----------: |
-| Headache-Migraine Cluster | 2.63      | 3.42           | 
-| Anxiety-Mood Cluster      | 1.81      | 3.55          |
-| Cognitive Cluster         | 2.58      | 4.2           |
-| Ocular-Motor Cluster      | 0.35      | 0.94          |
-| Vestibular Cluster        | 1.72      | 3.01          |
-| Sleep Cluster             | 2.72      | 4.03          |
-| Total Symptom Score       | 11.81      | 16.96         |
+| Headache-Migraine Cluster | 2.5       | 3.26         | 
+| Anxiety-Mood Cluster      | 1.61      | 3.14          |
+| Cognitive Cluster         | 2.33      | 4.0           |
+| Ocular-Motor Cluster      | 0.32      | 0.92          |
+| Vestibular Cluster        | 1.64      | 2.83          |
+| Sleep Cluster             | 2.43      | 3.74          |
+| Total Symptom Score       | 10.83      | 15.74         |
 
 
 **Two post-injury tests**
 
-341 concussion injuries 
+336 concussion injuries 
 
 | **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** |
 | :-------------------| :-------------: | :-----------: | :-------------: | :-----------: |
-| Headache-Migraine Cluster | 2.81      | 3.29           | 0.74            | 1.61          |
-| Anxiety-Mood Cluster      | 1.78      | 3.33          | 0.34            | 1.18          |
-| Cognitive Cluster         | 2.86      | 4.13          | 0.76            | 1.95          |
-| Ocular-Motor Cluster      | 0.32      | 0.9          | 0.08             | 0.35          |
-| Vestibular Cluster        | 1.8      | 2.94           | 0.31            | 1.01          |
-| Sleep Cluster             | 2.56      | 3.7          | 0.7            | 1.82          |
-| Total Symptom Score       | 12.14     | 15.96         | 2.93            | 6.63          |
+| Headache-Migraine Cluster | 2.76      | 3.25           | 0.65            | 1.51          |
+| Anxiety-Mood Cluster      | 1.72      | 3.3          | 0.34            | 1.26          |
+| Cognitive Cluster         | 2.79      | 4.14          | 0.68            | 1.88          |
+| Ocular-Motor Cluster      | 0.32      | 0.9          | 0.06             | 0.31          |
+| Vestibular Cluster        | 1.83      | 2.98           | 0.29            | 0.99          |
+| Sleep Cluster             | 2.51      | 3.69          | 0.62            | 1.8          |
+| Total Symptom Score       | 11.94     | 16.01         | 2.64            | 6.4          |
 
 
 **Three post-injury tests**
 
-143 concussion injuries 
+133 concussion injuries 
 
 | **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** | **Mean Test 3** | **SD Test 3** | 
 | :-------------------| :-------------: | :-----------: | :-------------: | :-----------: | :-----------: | :-----------: | 
-| Headache-Migraine Cluster | 3.15   | 3.65        | 1.25         | 2.17       | 0.45 | 0.98 |
-| Anxiety-Mood Cluster      | 2.13   | 3.53       | 0.45         | 1.24       | 0.17 | 0.72 |
-| Cognitive Cluster         | 3.42   | 4.66       | 1.25         | 2.62       | 0.38 | 1.01 |
-| Ocular-Motor Cluster      | 0.42   | 1.02          | 0.12         | 0.44        | 0.01 | 0.12 |
-| Vestibular Cluster        | 2.19   | 3.41       | 0.52         | 1.27       | 0.09 | 0.35 |
-| Sleep Cluster             | 2.99   | 4.2       | 1.17         | 2.47       | 0.25 | 0.64 |
-| Total Symptom Score       | 14.31  | 17.98       | 4.76         | 8.73      | 1.36 | 2.54 | 
+| Headache-Migraine Cluster | 3.11   | 3.63        | 1.14         | 2.08       | 0.37 | 0.83 |
+| Anxiety-Mood Cluster      | 2.05   | 3.52       | 0.47         | 1.45       | 0.17 | 0.76 |
+| Cognitive Cluster         | 3.28   | 4.64       | 1.15         | 2.62       | 0.33 | 0.91 |
+| Ocular-Motor Cluster      | 0.38   | 1.01          | 0.09         | 0.38        | 0.01 | 0.09 |
+| Vestibular Cluster        | 2.23   | 3.49       | 0.47         | 1.26       | 0.08 | 0.35 |
+| Sleep Cluster             | 2.86   | 4.14       | 1.05         | 2.5       | 0.25 | 0.64 |
+| Total Symptom Score       | 13.92  | 18.03       | 4.35         | 8.66      | 0.19 | 0.59 | 
 
 
 **Four post-injury tests**
 
-40 concussion injuries 
+32 concussion injuries 
 
 | **Symptom Cluster** | **Mean Test 1** | **SD Test 1** | **Mean Test 2** | **SD Test 2** | **Mean Test 3** | **SD Test 3** | **Mean Test 4** | **SD Test 4** |
 | :-------------------| :-------------: | :-----------: | :-------------: | :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
-| Headache-Migraine Cluster | 3.85  | 4.04  | 1.48 | 2.35  | 0.88 | 1.45 | 0.4  | 1.37 |
-| Anxiety-Mood Cluster      | 2.83  | 3.75  | 0.55 | 1.3   | 0.22 | 0.58 | 0.03 | 0.16 |
-| Cognitive Cluster         | 4.12  | 5.45  | 1.45 | 2.66  | 0.6  | 1.32 | 0.4  | 1.92 |
-| Ocular-Motor Cluster      | 0.65  | 1.44  | 0.07 | 0.35  | 0    | 0    | 0    | 0    |
-| Vestibular Cluster        | 2.83  | 4.28  | 0.7  | 1.59  | 0.1  | 0.38 | 0.12 | 0.65 |
-| Sleep Cluster             | 4.18  | 5.42  | 1.85 | 3.55  | 0.38 | 0.84 | 0.17 | 0.59 |
-| Total Symptom Score       | 18.45 | 21.52 | 6.1  | 10.32 | 2.17 | 3.1  | 1.12 | 4.3  |
+| Headache-Migraine Cluster | 4.25  | 4.13  | 1.41 | 2.46  | 0.78 | 1.24 | 0.41 | 1.46 |
+| Anxiety-Mood Cluster      | 2.5   | 3.69  | 0.47 | 1.32  | 0.28 | 0.73 | 0.03 | 0.18 |
+| Cognitive Cluster         | 4.06  | 5.63  | 1.25 | 2.68  | 0.66 | 1.36 | 0.41 | 2.12 |
+| Ocular-Motor Cluster      | 0.72  | 1.57  | 0.03 | 0.18  | 0.03 | 0.18 | 0    | 0    |
+| Vestibular Cluster        | 3.38  | 4.62  | 0.72 | 1.73  | 0.19 | 0.59 | 0.12 | 0.71 |
+| Sleep Cluster             | 4.0   | 5.44  | 1.72 | 3.9   | 0.28 | 0.81 | 0.09 | 0.53 |
+| Total Symptom Score       | 18.91 | 22.3  | 5.59 | 10.87 | 2.22 | 3.67 | 1.06 | 4.77 |
