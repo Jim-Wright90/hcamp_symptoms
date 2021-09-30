@@ -269,9 +269,9 @@ impact <- d %>%
          pcss_difficulty_remembering = user_symptom21,
          pcss_visual_problems = user_symptom22,
          total_symptom_score = user_total_symptom_score) %>% 
-  mutate(headache_migraine_cluster_score = pcss_headache + pcss_light_sensitivity + pcss_noise_sensitivity,
+  mutate(headache_migraine_cluster_score = pcss_headache + pcss_light_sensitivity + pcss_noise_sensitivity + pcss_numbness,
          cognitive_cluster_score = pcss_difficulty_concentrating + pcss_difficulty_remembering + pcss_feeling_slow + pcss_feeling_foggy,
-         anxiety_mood_cluster_score = pcss_sadness + pcss_irritability + pcss_more_emotional + pcss_nervousness + pcss_numbness,
+         anxiety_mood_cluster_score = pcss_sadness + pcss_irritability + pcss_more_emotional + pcss_nervousness,
          ocular_motor_cluster_score = pcss_visual_problems,
          vestibular_cluster_score = pcss_dizziness + pcss_balance_problems + pcss_nausea + pcss_vomiting,
          sleep_cluster_score = pcss_drowsiness + pcss_fatigue + pcss_trouble_falling_asleep + pcss_excessive_sleep + pcss_loss_of_sleep)
@@ -283,16 +283,56 @@ impact <- d %>%
 
 impact$test_type
 
+baseline_data <- impact 
+
 impact <- impact %>% 
   filter(test_type != "Baseline" &
          test_type != "Baseline ++")
 
 impact$test_type
+baseline_data$test_type
+
+
+baseline_data <- baseline_data %>% 
+  filter(test_type == "Baseline",
+         age >= 12 & age <= 18) %>% 
+  arrange(passport_id)
+
+baseline_data %>% 
+  count(passport_id)
 
 # 12.10 update: filter age range to 12-18
 
 impact <- impact %>% 
   filter(age >= 12 & age <= 18)
+
+impact_export <- impact %>% 
+  select(-c(3:4))
+
+write.csv(impact_export, "impact_data.csv")
+
+baseline_data <- baseline_data %>% 
+  select(passport_id, test_date, test_type)
+
+# widen baseline tests 
+
+baseline_wide <- baseline_data %>% 
+  group_by(passport_id, test_type) %>% 
+  mutate(row = row_number()) %>% 
+  arrange(passport_id) %>% 
+  select(row, passport_id, test_date, test_type)
+
+
+
+
+baseline_wide$test_date <- as.Date(baseline_wide$test_date, format = "%m/%d/%Y")
+
+baseline_dates <- baseline_wide %>% 
+  rename(test_date_baseline = test_date,
+         test_type_baseline = test_type)
+
+write.csv(baseline_dates, "baseline_dates.csv")
+
 ```
 
 ```{r, include=FALSE}
@@ -892,7 +932,7 @@ four_pi_emotional <- pcss_emotional %>%
 ```
 
 ```{r, include=FALSE}
-# numbness - symptom 17
+# numbness/tingling - symptom 17
 
 pcss_numbness <- impact %>% 
   group_by(passport_id, test_type) %>% 
@@ -1958,6 +1998,8 @@ all_four_pi_pcss$test_date_post_injury_3 <- as.Date(all_four_pi_pcss$test_date_p
 all_four_pi_pcss$test_date_post_injury_4 <- as.Date(all_four_pi_pcss$test_date_post_injury_4,
                                                     format = "%m/%d/%Y")
 
+baseline_data$test_date <- as.Date(baseline_data$test_date, format = "%m/%d/%Y")
+
 ```
 
 ```{r, include=FALSE}
@@ -2022,16 +2064,19 @@ all_four_pi_pcss <- all_four_pi_pcss %>%
   mutate(dys_btwn_tst_1_2 = test_date_post_injury_2 - test_date_post_injury_1,
          dys_btwn_tst_2_3 = test_date_post_injury_3 - test_date_post_injury_2,
          dys_btwn_tst_3_4 = test_date_post_injury_4 - test_date_post_injury_3,
+         dys_btwn_tst_1_3 = test_date_post_injury_3 - test_date_post_injury_1,
          dys_btwn_tst_1_4 = test_date_post_injury_4 - test_date_post_injury_1) %>% 
   mutate(dys_btwn_tst_1_2 = as.numeric(dys_btwn_tst_1_2),
          dys_btwn_tst_2_3 = as.numeric(dys_btwn_tst_2_3),
          dys_btwn_tst_3_4 = as.numeric(dys_btwn_tst_3_4),
+         dys_btwn_tst_1_3 = as.numeric(dys_btwn_tst_1_3),
          dys_btwn_tst_1_4 = as.numeric(dys_btwn_tst_1_4))
 
 create_react_time(all_four_pi_pcss, dys_btwn_tst_1_2)
 create_react_time(all_four_pi_pcss, dys_btwn_tst_2_3)
 create_react_time(all_four_pi_pcss, dys_btwn_tst_3_4)
 create_react_time(all_four_pi_pcss, dys_btwn_tst_1_4)
+create_react_time(all_four_pi_pcss, dys_btwn_tst_1_3)
 
 # filter out cases where the days between test 1 and 2 is 30 days, 2 and 3 is 30 days, and 3 and 4 is 30 days, and tests 1 and 4 is 90 days
 all_four_pi_pcss <- all_four_pi_pcss %>% 
@@ -2063,6 +2108,22 @@ write.csv(all_one_pi_pcss, "one_impact_pcss_test.csv")
 write.csv(all_two_pi_pcss, "two_impact_pcss_tests.csv")
 write.csv(all_three_pi_pcss, "three_impact_pcss_tests.csv")
 write.csv(all_four_pi_pcss, "four_impact_pcss_tests.csv")
+
+```
+
+```{r, include=FALSE}
+# attempting to join baseline data set to post-injury sets to determine duration of time from baseline test to post-injury test
+
+one_test_baseline <- right_join(baseline_data, all_one_pi_pcss)
+
+
+one_test_baseline <- one_test_baseline %>% 
+  mutate(dys_btwn_pi_bl = test_date_post_injury_1 - test_date) %>% 
+  mutate(dys_btwn_pi_bl = as.numeric(dys_btwn_pi_bl)) %>% 
+  filter(dys_btwn_pi_bl >= 0)
+
+summary(one_test_baseline$dys_btwn_pi_bl)
+
 
 ```
 
@@ -4354,3 +4415,73 @@ Similar to the non-merged data, average total symptom severity scores decrease w
 | Vestibular Cluster        | 3.38  | 4.62  | 0.72 | 1.73  | 0.19 | 0.59 | 0.12 | 0.71 |
 | Sleep Cluster             | 4.0   | 5.44  | 1.72 | 3.9   | 0.28 | 0.81 | 0.09 | 0.53 |
 | Total Symptom Score       | 18.91 | 22.3  | 5.59 | 10.87 | 2.22 | 3.67 | 1.06 | 4.77 |
+
+
+```{r, include=FALSE}
+
+#exporting data for data science project 
+
+head(all_clean_sims)
+
+sims_concussion_data <- all_clean_sims %>% 
+  select(-c(6, 7))
+
+write.csv(sims_concussion_data, "sims_concussion_data.csv")
+
+head(all_one_pi_pcss)
+
+one_post_injury_impact_test <- all_one_pi_pcss %>% 
+  select(-c(4, 5))
+
+write.csv(one_post_injury_impact_test, "one_post_injury_impact_test.csv")
+
+head(all_two_pi_pcss)
+
+two_post_injury_impact_test <- all_two_pi_pcss %>% 
+  select(-c(5, 6))
+
+write.csv(two_post_injury_impact_test, "two_post_injury_impact_test.csv")
+
+head(all_three_pi_pcss)
+
+three_post_injury_impact_test <- all_three_pi_pcss %>% 
+  select(-c(6, 7))
+
+write.csv(three_post_injury_impact_test, "three_post_injury_impact_test.csv")
+
+head(all_four_pi_pcss)
+
+four_post_injury_impact_test <- all_four_pi_pcss %>% 
+  select(-c(7, 8))
+
+write.csv(four_post_injury_impact_test, "four_post_injury_impact_test.csv")
+
+head(one_pi_pcss_sims)
+
+one_post_injury_test_impact_sims_merge <- one_pi_pcss_sims %>% 
+  select(-c(8, 9))
+
+write.csv(one_post_injury_test_impact_sims_merge, "one_post_injury_test_impact_sims_merge.csv")
+
+
+
+two_post_injury_test_impact_sims_merge <- two_pi_pcss_sims %>% 
+  select(-c(9, 10))
+
+write.csv(two_post_injury_test_impact_sims_merge, "two_post_injury_test_impact_sims_merge.csv")
+
+
+
+three_post_injury_test_impact_sims_merge <- three_pi_pcss_sims %>% 
+  select(-c(10, 11))
+
+write.csv(three_post_injury_test_impact_sims_merge, "three_post_injury_test_impact_sims_merge.csv")
+
+
+
+four_post_injury_test_impact_sims_merge <- four_pi_pcss_sims %>% 
+  select(-c(11, 12))
+
+write.csv(four_post_injury_test_impact_sims_merge, "four_post_injury_test_impact_sims_merge.csv")
+
+```
